@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-21T17:26:12.289Z",
+  "generatedAt": "2026-05-21T17:49:34.431Z",
   "tagline": "US withdrawal from global health and armed conflicts driven by demand for rare earth metals are key drivers behind an emerging Ebola disaster.",
   "hero": {
     "title": "The Smartphone Minerals War That Destroyed Congo's Health System — Just in Time for Ebola",
@@ -38,7 +38,7 @@
       "author": "Angela Rasmussen, PhD",
       "sourceName": "Rasmussen Retorts",
       "date": "2026-05-20T19:41:26.000Z",
-      "image": "images/rasmussen-taking-shots.png",
+      "image": "",
       "excerpt": "Each day brings fresh horrors, so we will keep you up to date on them",
       "brief": "•\t>500 cases, 130+ deaths \n•\tCases now in Kampala, Goma, Bunia, Butembe, and possibly South Sudan\n•\tUS withdrew from WHO and eliminated USAID. Now offer $10M. Too little too late\n•\tRisk of spread outside the outbreak zone is low. Risk to global health infrastructure is high",
       "kicker": "EBOLA",
@@ -89,20 +89,6 @@
       "tags": []
     },
     {
-      "title": "An American doctor with Ebola was evacuated to Berlin. The U.S. has biocontainment units.",
-      "link": "https://www.celinegounder.com/p/ebola-american-doctor-evacuated-berlin-us-response",
-      "author": "Celine Gounder, MD",
-      "sourceName": "What I can and Can't Say on TV",
-      "date": "2026-05-19T22:05:00.000Z",
-      "image": "https://substackcdn.com/image/youtube/w_728,c_limit/157yAIulUhw",
-      "excerpt": "What happened on Tuesday: the medevac, the 50 clinics, and what the State Department said about USAID.",
-      "brief": "",
-      "kicker": "EBOLA",
-      "tags": [
-        "Ebola"
-      ]
-    },
-    {
       "title": "Breaking News: MV Hondius passenger at National Quarantine Unit intends to challenge a quarantine order she received on Monday.",
       "link": "https://insidemedicine.substack.com/p/breaking-news-mv-hondius-passenger",
       "author": "Jeremy Faust, MD",
@@ -117,13 +103,27 @@
       ]
     },
     {
-      "title": "CDC Used Title 42 to Ban Travelers Over Ebola. Its Own Order Explains Why That Won’t Work.",
-      "link": "https://www.celinegounder.com/p/title-42-ebola-travel-ban-bundibugyo",
-      "author": "Celine Gounder, MD",
-      "sourceName": "What I can and Can't Say on TV",
-      "date": "2026-05-18T22:04:12.000Z",
-      "image": "https://substackcdn.com/image/youtube/w_728,c_limit/hos3-jmpFus",
-      "excerpt": "Title 42 sat unused for decades, then became an immigration tool during COVID. Now the CDC has invoked it for Ebola, a disease the order itself says can’t be transmitted by asymptomatic cases.",
+      "title": "EBOLA OUTBREAK UPDATE: Not now, Bundibugyo virus",
+      "link": "https://rasmussenretorts.substack.com/p/ebola-outbreak-update-not-now-bundibugyo",
+      "author": "Angela Rasmussen, PhD",
+      "sourceName": "Rasmussen Retorts",
+      "date": "2026-05-15T19:01:19.000Z",
+      "image": "",
+      "excerpt": "We don't know much, but we know a lot about Ebola and we know a lot of people who are working on it. Join us later today at 5 pm ET for another update!",
+      "brief": "",
+      "kicker": "EBOLA",
+      "tags": [
+        "Ebola"
+      ]
+    },
+    {
+      "title": "Something deeper than hantavirus",
+      "link": "https://yourlocalepidemiologist.substack.com/p/something-deeper-than-hantavirus",
+      "author": "Katelyn Jetelina, PhD",
+      "sourceName": "Your Local Epidemiologist",
+      "date": "2026-05-15T10:31:11.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!F14W!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0581862e-d7f6-42c5-a09f-3c9d53776917_1182x842.png",
+      "excerpt": "Two weeks ago, my phone started lighting up before I’d had my coffee.",
       "brief": "",
       "kicker": "",
       "tags": []
