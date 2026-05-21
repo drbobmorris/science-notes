@@ -1,77 +1,115 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-09T17:03:19.470Z",
-  "tagline": "",
+  "generatedAt": "2026-05-21T17:26:12.289Z",
+  "tagline": "US withdrawal from global health and armed conflicts driven by demand for rare earth metals are key drivers behind an emerging Ebola disaster.",
   "hero": {
-    "title": "Disruption",
-    "link": "https://drbobmorris.substack.com/p/disruption",
-    "author": "Bob Morris, MD, PhD",
-    "sourceName": "The Skeptical Scientist",
-    "date": "2026-05-07T21:41:27.000Z",
-    "image": "https://substackcdn.com/image/fetch/$s_!NmQ5!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F395856aa-b510-4e95-835a-1ba0118f461d_1432x955.jpeg",
-    "excerpt": "Hantavirus and the Consequences of Touching the Wild",
-    "brief": "Climate change, ecosystem disruption, and emerging infectious collided on a cruise ship.\nHumans always make the wild a little less wild\n",
-    "kicker": "CLIMATE & ENVIRONMENT",
+    "title": "The Smartphone Minerals War That Destroyed Congo's Health System — Just in Time for Ebola",
+    "link": "https://www.celinegounder.com/p/congo-health-system-collapse-ebola-300000-deaths",
+    "author": "Celine Gounder, MD",
+    "sourceName": "What I can and Can't Say on TV",
+    "date": "2026-05-18T11:29:40.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!bT7o!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1f984424-bf22-47e0-99a4-5a007529f1de_1024x559.png",
+    "excerpt": "Rwanda’s mineral extraction, America’s aid cuts, and the most money-driven conflict one epidemiologist has ever seen.",
+    "brief": "•\tUSAID 2025 freeze plus armed conflict driven by demand for rare earth metals hits East Congo in the same week\n•\tResulting destruction of health system caused 300,000 excess deaths over the past year\n•\tThe population could no longer rely on the clinics.\n•\tThen Ebola hit ",
+    "kicker": "EBOLA",
     "tags": [
-      "Climate & Environment",
-      "hantavirus"
+      "Ebola",
+      "Policy"
     ]
   },
   "selected": [
     {
-      "title": "A hantavirus update",
-      "link": "https://youcanknowthings.substack.com/p/a-hantavirus-update",
-      "author": "Kristen Panthagani, MD, PhD",
-      "sourceName": "You Can Know Things",
-      "date": "2026-05-07T00:09:19.000Z",
-      "image": "https://substack-post-media.s3.amazonaws.com/public/images/d37ef9e6-a9da-4ace-b49c-d518696e7c2f_674x452.png",
-      "excerpt": "I'm sending this not because I'm worried, but because the internet is stressing",
-      "brief": "- Cruise ship hantavirus outbreak: Andes virus, 5 cases, 3 deaths.\n- Not COVID: not novel, high fatality + inefficient spread make it traceable.\n- Risk to US population is low. Expect more cases and rumors anyway.",
-      "kicker": "HANTAVIRUS",
+      "title": "American contracts Ebola in DRC, headed to Germany with other exposed Americans. Expert analysis.",
+      "link": "https://insidemedicine.substack.com/p/american-contracts-ebola-in-drc-headed",
+      "author": "Jeremy Faust, MD",
+      "sourceName": "Inside Medicine",
+      "date": "2026-05-19T14:00:34.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!wH19!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4af20558-dc31-43bb-a2c1-33b3dbc660ce_1536x1024.png",
+      "excerpt": "Dr. Boghuma Titanji and I analyze the Trump administration’s new travel restrictions, the decision to send exposed Americans to Germany, and what the outbreak reveals about US readiness.",
+      "brief": "•\tTrump blocked entry of infected American doctor and exposed family\n•\tUS bans non-US passport holders from DRC, Uganda, South Sudan. Against WHO guidance, amplifies stigma\n•\tUS withdrawal means WHO can mobilize only $500K from its emergency fund",
+      "kicker": "EBOLA",
       "tags": [
-        "hantavirus"
+        "Ebola"
       ]
     },
     {
-      "title": "Devastation Without a Flash",
-      "link": "https://blanphear.substack.com/p/devestation-without-a-flash",
+      "title": "Primary Series: Happy First Ebola Outbreak Situation Report Day!",
+      "link": "https://rasmussenretorts.substack.com/p/primary-series-happy-first-ebola",
+      "author": "Angela Rasmussen, PhD",
+      "sourceName": "Rasmussen Retorts",
+      "date": "2026-05-20T19:41:26.000Z",
+      "image": "images/rasmussen-taking-shots.png",
+      "excerpt": "Each day brings fresh horrors, so we will keep you up to date on them",
+      "brief": "•\t>500 cases, 130+ deaths \n•\tCases now in Kampala, Goma, Bunia, Butembe, and possibly South Sudan\n•\tUS withdrew from WHO and eliminated USAID. Now offer $10M. Too little too late\n•\tRisk of spread outside the outbreak zone is low. Risk to global health infrastructure is high",
+      "kicker": "EBOLA",
+      "tags": [
+        "Ebola"
+      ]
+    },
+    {
+      "title": "The Burden of Caution",
+      "link": "https://blanphear.substack.com/p/the-burden-of-caution",
       "author": "Bruce Lanphear, MD",
       "sourceName": "Plagues, Pollution & Poverty",
-      "date": "2026-05-03T07:02:34.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!VvzM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa2d24d95-e613-4603-b92d-ed2c1a926600_1254x1254.png",
-      "excerpt": "The Largest Mass Poisoning in Human History",
-      "brief": "- Lead contributed to ~120M deaths in a century — 30% of global coronary heart disease mortality.\n- The harm wasn't hidden, it was dismissed.\n- \"We learned to see the bomb. We are still learning to see lead.\"",
-      "kicker": "LEAD",
+      "date": "2026-05-19T10:03:21.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!H4DY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5fe4febb-235b-440c-835c-f9b477ec3a88_1024x1536.jpeg",
+      "excerpt": "When scientific humility becomes public confusion",
+      "brief": "•\tThe cautious language of epidemiology serves industries that profit from delay.\n•\tThe tobacco playbook: weaponize scientific caution against science itself. Asbestos, lead, climate followed the same arc.\n•\tHumility is not evasion. Sometimes the honest word is \"causes.\"",
+      "kicker": "ENVIRONMENTAL HEALTH",
       "tags": [
-        "Lead",
         "Environmental Health"
-      ]
-    },
-    {
-      "title": "The Paradox of Medical AI Implementation",
-      "link": "https://erictopol.substack.com/p/the-paradox-of-medical-ai-implementation",
-      "author": "Eric Topol, MD",
-      "sourceName": "Ground Truths",
-      "date": "2026-05-03T14:31:13.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!b-n1!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0a3df5db-3eb0-4a11-a2a4-7056b027a785_4162x2334.heic",
-      "excerpt": "From Missed Opportunities to Missing Evidence",
-      "brief": "- A decade of validated medical AI imaging — barely used.\n- 35% of physicians use LLMs in clinical decisions, with little outcome data.\n- Where evidence is strongest, adoption is weakest. Where it's fastest, it's thinnest.",
-      "kicker": "MEDICINE",
-      "tags": [
-        "Medicine",
-        "AI"
       ]
     }
   ],
   "recent": [
     {
-      "title": "Andes Virus is Almost Over",
-      "link": "https://rasmussenretorts.substack.com/p/andes-virus-is-almost-over",
-      "author": "Angela Rasmussen, PhD",
-      "sourceName": "Rasmussen Retorts",
-      "date": "2026-05-08T18:52:06.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!TI4i!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe7a2b38e-a8a0-44ab-bd6f-c227da8a47b5_1976x1635.png",
-      "excerpt": "There sure are a lot of closet hantavirologists out there who seem confused about what is factual. Here's what is.",
+      "title": "Disease, Borders, and Blame: A Seven-Century Pattern",
+      "link": "https://www.celinegounder.com/p/every-outbreak-has-a-scapegoat",
+      "author": "Celine Gounder, MD",
+      "sourceName": "What I can and Can't Say on TV",
+      "date": "2026-05-21T14:51:20.000Z",
+      "image": "https://substackcdn.com/image/youtube/w_728,c_limit/ahKvmqsrEfk",
+      "excerpt": "From the Black Death to Ebola, disease control has been used to sort people by race and nationality. The pattern is centuries old, and it is happening again.",
+      "brief": "",
+      "kicker": "EBOLA",
+      "tags": [
+        "Ebola"
+      ]
+    },
+    {
+      "title": "Misinformation Masterclass",
+      "link": "https://drbobmorris.substack.com/p/misinformation-masterclass",
+      "author": "Bob Morris, MD, PhD",
+      "sourceName": "The Skeptical Scientist",
+      "date": "2026-05-20T15:48:28.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!NstQ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa4ba2be3-9eab-4009-a682-c71b0f791d5d_948x1040.png",
+      "excerpt": "A Wall Street Journal editor packs a pandemic’s worth of confusion into just 102 words",
+      "brief": "",
+      "kicker": "",
+      "tags": []
+    },
+    {
+      "title": "An American doctor with Ebola was evacuated to Berlin. The U.S. has biocontainment units.",
+      "link": "https://www.celinegounder.com/p/ebola-american-doctor-evacuated-berlin-us-response",
+      "author": "Celine Gounder, MD",
+      "sourceName": "What I can and Can't Say on TV",
+      "date": "2026-05-19T22:05:00.000Z",
+      "image": "https://substackcdn.com/image/youtube/w_728,c_limit/157yAIulUhw",
+      "excerpt": "What happened on Tuesday: the medevac, the 50 clinics, and what the State Department said about USAID.",
+      "brief": "",
+      "kicker": "EBOLA",
+      "tags": [
+        "Ebola"
+      ]
+    },
+    {
+      "title": "Breaking News: MV Hondius passenger at National Quarantine Unit intends to challenge a quarantine order she received on Monday.",
+      "link": "https://insidemedicine.substack.com/p/breaking-news-mv-hondius-passenger",
+      "author": "Jeremy Faust, MD",
+      "sourceName": "Inside Medicine",
+      "date": "2026-05-19T21:38:29.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!VuDe!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fccb88dcd-0f0e-40b3-bb63-9587dfa3f3f1_1121x715.jpeg",
+      "excerpt": "Dr. Jay Bhattacharya signed the order, requiring her to stay put, after she and others on board were exposed to Andes hantavirus.",
       "brief": "",
       "kicker": "HANTAVIRUS",
       "tags": [
@@ -79,63 +117,16 @@
       ]
     },
     {
-      "title": "2020 is haunting us, and hantavirus is the séance",
-      "link": "https://theunbiasedscipod.substack.com/p/2020-is-haunting-us-and-hantavirus",
-      "author": "Jess Steier, DrPH",
-      "sourceName": "Unbiased Science",
-      "date": "2026-05-07T18:21:00.000Z",
-      "image": "https://substack-post-media.s3.amazonaws.com/public/images/08fda6c9-aca7-4b07-9195-2d80dade3e73_1350x1080.png",
-      "excerpt": "A hantavirus outbreak, a cruise ship, and the tightrope we are all trying to walk",
+      "title": "CDC Used Title 42 to Ban Travelers Over Ebola. Its Own Order Explains Why That Won’t Work.",
+      "link": "https://www.celinegounder.com/p/title-42-ebola-travel-ban-bundibugyo",
+      "author": "Celine Gounder, MD",
+      "sourceName": "What I can and Can't Say on TV",
+      "date": "2026-05-18T22:04:12.000Z",
+      "image": "https://substackcdn.com/image/youtube/w_728,c_limit/hos3-jmpFus",
+      "excerpt": "Title 42 sat unused for decades, then became an immigration tool during COVID. Now the CDC has invoked it for Ebola, a disease the order itself says can’t be transmitted by asymptomatic cases.",
       "brief": "",
       "kicker": "",
       "tags": []
-    },
-    {
-      "title": "The Invisible Made Visible",
-      "link": "https://blanphear.substack.com/p/the-invisible-made-visible",
-      "author": "Bruce Lanphear, MD",
-      "sourceName": "Plagues, Pollution & Poverty",
-      "date": "2026-05-05T08:34:32.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!_Zuu!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F400d45dd-9682-41c6-a160-53249667fb37_1683x1397.jpeg",
-      "excerpt": "How a quiet government survey revealed the chemical reality of everyday life—and the power of prevention",
-      "brief": "",
-      "kicker": "ENVIRONMENTAL HEALTH",
-      "tags": [
-        "Environmental Health",
-        "Public Health"
-      ]
-    },
-    {
-      "title": "MAHA vs. the FDA: Dredging up old anti-regulation revisionist history",
-      "link": "https://sciencebasedmedicine.org/maha-vs-the-fda-dredging-up-old-anti-regulation-nonsense/?utm_source=rss&utm_medium=rss&utm_campaign=maha-vs-the-fda-dredging-up-old-anti-regulation-nonsense",
-      "author": "Jonathan Howard et al.",
-      "sourceName": "Science-Based Medicine",
-      "date": "2026-05-04T07:00:00.000Z",
-      "image": "",
-      "excerpt": "Recently, I've noticed articles from outlets aligned with MAHA calling for the elimination of the FDA. It's all recycled \"health freedom\" revisionist history and ahistorical nonsense. The post MAHA vs. the FDA: Dredging up old anti-regulation revisionist history first appeared on Science-Based Medicine.",
-      "brief": "",
-      "kicker": "FDA",
-      "tags": [
-        "FDA",
-        "MAHA",
-        "Politics"
-      ]
-    },
-    {
-      "title": "The Gold Double Standard",
-      "link": "https://drbobmorris.substack.com/p/the-gold-double-standard",
-      "author": "Bob Morris, MD, PhD",
-      "sourceName": "The Skeptical Scientist",
-      "date": "2026-04-30T22:40:33.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!8rgk!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fad771624-59a2-47e4-aaa4-6d6e24735fd6_1002x1436.png",
-      "excerpt": "What's behind the scientific community's response to Bhattacharya's role in a conference on scientific integrity",
-      "brief": "",
-      "kicker": "MISINFORMATION",
-      "tags": [
-        "Misinformation",
-        "Trump Administration",
-        "Bhattacharya"
-      ]
     }
   ],
   "feeds": {
@@ -156,16 +147,6 @@
         "url": "https://blanphear.substack.com/feed"
       },
       {
-        "name": "Science-Based Medicine",
-        "author": "Jonathan Howard et al.",
-        "url": "https://sciencebasedmedicine.org/feed/"
-      },
-      {
-        "name": "Making Science Make Sense",
-        "author": "Jessica Malaty Rivera, MS",
-        "url": "https://makingsciencemakesense.substack.com/feed"
-      },
-      {
         "name": "Ground Truths",
         "author": "Eric Topol, MD",
         "url": "https://erictopol.substack.com/feed"
@@ -177,13 +158,38 @@
       },
       {
         "name": "Protagonist Science",
-        "author": "",
+        "author": "Philip Markolin, PhD",
         "url": "https://www.protagonist-science.com/feed"
       },
       {
         "name": "You Can Know Things",
         "author": "Kristen Panthagani, MD, PhD",
         "url": "https://youcanknowthings.substack.com/feed"
+      },
+      {
+        "name": "Beyond the Noise",
+        "author": "Paul Offit, MD",
+        "url": "https://pauloffit.substack.com/feed/"
+      },
+      {
+        "name": "Science Based Medicine",
+        "author": "",
+        "url": "https://sciencebasedmedicine.org/feed/"
+      },
+      {
+        "name": "What I can and Can't Say on TV",
+        "author": "Celine Gounder, MD",
+        "url": "https://www.celinegounder.com/feed"
+      },
+      {
+        "name": "Inside Medicine",
+        "author": "Jeremy Faust, MD",
+        "url": "https://insidemedicine.substack.com/feed"
+      },
+      {
+        "name": "Your Local Epidemiologist",
+        "author": "Katelyn Jetelina, PhD",
+        "url": "https://yourlocalepidemiologist.substack.com/feed"
       }
     ],
     "writers": [
@@ -193,14 +199,14 @@
         "url": "https://www.importantcontext.news/feed"
       },
       {
-        "name": "Counter Disinformation Project",
-        "author": "Counter Disinformation Project",
-        "url": "https://counterdisinformationproject.substack.com/feed"
-      },
-      {
         "name": "Pandemic Accountability Index",
         "author": "JJ Kogburne",
         "url": "https://www.panaccindex.info/feed"
+      },
+      {
+        "name": "Making Science Make Sense",
+        "author": "Jessica Malaky Rivera",
+        "url": "https://makingsciencemakesense.substack.com/feed"
       }
     ]
   }
