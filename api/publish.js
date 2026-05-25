@@ -102,7 +102,7 @@ async function handler(req, res) {
         const db_ = b.date ? new Date(b.date).getTime() : 0;
         return db_ - da;
       })
-      .slice(0, fp.recentCount || 5)
+      .slice(0, fp.recentCount || 6)
       .map(({ url }) => serialize(url))
       .filter(Boolean);
 

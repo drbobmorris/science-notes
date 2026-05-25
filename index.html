@@ -1572,6 +1572,29 @@ footer {
 </header>
 
 <section class="container">
+  <div class="tagline-bar">
+    <p id="state-tagline" class="tagline-text"></p>
+    .tagline-bar {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem 1.5rem;
+      border-bottom: 1px solid var(--rule-soft);
+      margin-bottom: 2rem;
+    }
+    .tagline-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.5;
+      color: var(--ink-soft);
+      max-width: 60ch;
+      margin: 0 auto;
+      text-align: center;
+      font-variation-settings: "opsz" 32;
+    }
+    .tagline-text:empty { display: none; }
+  </div>
+  
   <div class="hero">
     <div class="hero-lead" id="state-hero">
       <div class="hero-image-wrap">
