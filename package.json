@@ -1,0 +1,9 @@
+{
+  "name": "science-notes",
+  "version": "1.0.0",
+  "description": "Science Notes — A publication of the Science Accountability Institute",
+  "private": true,
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  }
+}
