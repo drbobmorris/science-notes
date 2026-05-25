@@ -5,7 +5,7 @@
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, x-sai-password" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, x-sai-password, x-sai-editor" },
         { "key": "Access-Control-Max-Age", "value": "86400" }
       ]
     }
