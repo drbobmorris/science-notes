@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-25T21:44:24.332Z",
+  "generatedAt": "2026-05-26T13:35:29.237Z",
   "generatedBy": "Editor",
   "tagline": "Ebola has been building for months, Fluoride isn't over, Lockdown love, and MAHA delusions.",
   "hero": {
@@ -11,19 +11,69 @@
     "date": "2026-05-24T15:05:17.000Z",
     "image": "https://substackcdn.com/image/fetch/$s_!7pRA!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5c90e7f0-ef58-4f75-b1e1-35dee4c71ec9_1320x1330.png",
     "excerpt": "Everything I Think You Need to Know",
-    "brief": "Outbreak ~2-3 months old, true count ~2,000. Second-largest ever\nNo Bundibugyo vaccine. Ervebo and mAbs may help. Limited supply\nTreatment center burnings recur when responders ignore burial customs",
+    "brief": "-Outbreak ~2-3 months old, true count ~2,000. Second-largest ever\n-No Bundibugyo vaccine. Ervebo and mAbs may help. Limited supply\n-Treatment center burnings recur when responders ignore burial customs",
     "kicker": "",
     "tags": []
   },
   "selected": [
     {
-      "title": "How Unbekoming! The central delusion of MAHA",
-      "link": "https://sciencebasedmedicine.org/how-unbekoming-the-central-delusion-of-maha/?utm_source=rss&utm_medium=rss&utm_campaign=how-unbekoming-the-central-delusion-of-maha",
-      "author": "",
-      "sourceName": "Science Based Medicine",
-      "date": "2026-05-25T07:00:00.000Z",
-      "image": "https://sciencebasedmedicine.org/wp-content/uploads/2026/05/delusion-480x270.jpeg",
-      "excerpt": "The antivax movement has a central conspiracy theory, but there is also a central delusion behind MAHA, revealed by a blogger with the 'nym Unbekoming. The post How Unbekoming! The central delusion of MAHA first appeared on Science-Based Medicine.",
+      "title": "The Smartphone Minerals War That Destroyed Congo's Health System — Just in Time for Ebola",
+      "link": "https://www.celinegounder.com/p/congo-health-system-collapse-ebola-300000-deaths",
+      "author": "Celine Gounder, MD",
+      "sourceName": "What I can and Can't Say on TV",
+      "date": "2026-05-18T11:29:40.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!bT7o!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1f984424-bf22-47e0-99a4-5a007529f1de_1024x559.png",
+      "excerpt": "Rwanda’s mineral extraction, America’s aid cuts, and the most money-driven conflict one epidemiologist has ever seen.",
+      "brief": "The Story Behind Ebola\n-USAID 2025 freeze plus armed conflict driven by demand for rare earth metals hits East Congo the same week\n-Resulting destruction of health system caused 300,000 excess deaths over the past year\n-Then Ebola hit",
+      "kicker": "",
+      "tags": []
+    },
+    {
+      "title": "The Burden of Caution",
+      "link": "https://blanphear.substack.com/p/the-burden-of-caution",
+      "author": "Bruce Lanphear, MD",
+      "sourceName": "Plagues, Pollution & Poverty",
+      "date": "2026-05-19T10:03:21.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!H4DY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5fe4febb-235b-440c-835c-f9b477ec3a88_1024x1536.jpeg",
+      "excerpt": "When scientific humility becomes public confusion",
+      "brief": "Epidemiology Buries the Lede\n-Epidemiology relies on cautious language re causality\n-Tobacco playbook weaponizes scientific caution against science. Asbestos, lead, climate followed the same arc.\n-Sometimes the honest word is \"causes.\" ",
+      "kicker": "",
+      "tags": []
+    },
+    {
+      "title": "American contracts Ebola in DRC, headed to Germany with other exposed Americans. Expert analysis.",
+      "link": "https://insidemedicine.substack.com/p/american-contracts-ebola-in-drc-headed",
+      "author": "Jeremy Faust, MD",
+      "sourceName": "Inside Medicine",
+      "date": "2026-05-19T14:00:34.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!wH19!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4af20558-dc31-43bb-a2c1-33b3dbc660ce_1536x1024.png",
+      "excerpt": "Dr. Boghuma Titanji and I analyze the Trump administration’s new travel restrictions, the decision to send exposed Americans to Germany, and what the outbreak reveals about US readiness.",
+      "brief": "US Isolation\n-Trump blocks entry of infected American doctor and family\n- US bans non-US passport holders from DRC, Uganda, Sudan against WHO guidance\n- US withdrawal means WHO can mobilize only $500K from its emergency fund",
+      "kicker": "",
+      "tags": []
+    }
+  ],
+  "recent": [
+    {
+      "title": "Why Ebola Isn't Going to \"Go Airborne\"",
+      "link": "https://rasmussenretorts.substack.com/p/why-ebola-isnt-going-to-go-airborne",
+      "author": "Angela Rasmussen, PhD",
+      "sourceName": "Rasmussen Retorts",
+      "date": "2026-05-25T22:20:59.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!8KzM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8e4af39d-2696-4d24-b442-ab22a793787c_1600x900.png",
+      "excerpt": "And stop sounding so excited about it",
+      "brief": "",
+      "kicker": "",
+      "tags": []
+    },
+    {
+      "title": "The Remarkable Proliferation of Cancer Immunotherapies",
+      "link": "https://erictopol.substack.com/p/the-remarkable-proliferation-of-cancer",
+      "author": "Eric Topol, MD",
+      "sourceName": "Ground Truths",
+      "date": "2026-05-24T17:38:38.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!hrgB!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fde5ebc98-721f-454a-8f8c-17e3fe3ea9a7_1250x1590.heic",
+      "excerpt": "On a Path to Interception—Prevention Vaccines",
       "brief": "",
       "kicker": "",
       "tags": []
@@ -44,32 +94,20 @@
       ]
     },
     {
-      "title": "My Sincere Message to Dr. Jay Bhattacharya: Welcome Aboard and Good Luck.  We Are Rooting for Your Success.",
-      "link": "https://sciencebasedmedicine.org/lockdownjay2/?utm_source=rss&utm_medium=rss&utm_campaign=lockdownjay2",
-      "author": "",
-      "sourceName": "Science Based Medicine",
-      "date": "2026-05-24T11:45:00.000Z",
-      "image": "https://sciencebasedmedicine.org/wp-content/uploads/2026/05/image-8-480x434.png",
-      "excerpt": "It seems having real-world responsibility has taught Dr. Jay Bhattacharya a valuable lesson- it’s better to try to stop dangerous viruses rather than play catch-up after a lot of people have already died. The post My Sincere Message to Dr. Jay Bhattacharya: Welcome Aboard and Good Luck. We Are Rooting for Your Success.",
+      "title": "Why Citizenship-Based Travel Bans Fail the Precautionary Principle",
+      "link": "https://www.celinegounder.com/p/who-gets-to-be-cautious",
+      "author": "Celine Gounder, MD",
+      "sourceName": "What I can and Can't Say on TV",
+      "date": "2026-05-23T16:17:45.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!NMP6!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1efcd1ff-09a8-4572-a651-76aff84b43f8_1024x559.png",
+      "excerpt": "From HIV to COVID to Ebola: the precautionary principle has been applied more aggressively to foreigners than to citizens for decades.",
       "brief": "",
-      "kicker": "BHATTACHARYA",
+      "kicker": "EBOLA",
       "tags": [
-        "Bhattacharya"
+        "Ebola",
+        "COVID",
+        "Policy"
       ]
-    }
-  ],
-  "recent": [
-    {
-      "title": "The Remarkable Proliferation of Cancer Immunotherapies",
-      "link": "https://erictopol.substack.com/p/the-remarkable-proliferation-of-cancer",
-      "author": "Eric Topol, MD",
-      "sourceName": "Ground Truths",
-      "date": "2026-05-24T17:38:38.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!hrgB!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fde5ebc98-721f-454a-8f8c-17e3fe3ea9a7_1250x1590.heic",
-      "excerpt": "On a Path to Interception—Prevention Vaccines",
-      "brief": "",
-      "kicker": "",
-      "tags": []
     },
     {
       "title": "Misinformation Masterclass",
@@ -79,42 +117,6 @@
       "date": "2026-05-20T15:48:28.000Z",
       "image": "https://substackcdn.com/image/fetch/$s_!NstQ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa4ba2be3-9eab-4009-a682-c71b0f791d5d_948x1040.png",
       "excerpt": "A Wall Street Journal editor packs a pandemic’s worth of confusion into just 102 words",
-      "brief": "",
-      "kicker": "",
-      "tags": []
-    },
-    {
-      "title": "World Cup’s hidden health operation",
-      "link": "https://yourlocalepidemiologist.substack.com/p/world-cups-hidden-health-operation",
-      "author": "Katelyn Jetelina, PhD",
-      "sourceName": "Your Local Epidemiologist",
-      "date": "2026-05-20T10:30:56.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!xBUC!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F33915f8d-dc62-499d-9844-af94bef81b44_2000x1125.jpeg",
-      "excerpt": "YLE behind the scenes",
-      "brief": "",
-      "kicker": "",
-      "tags": []
-    },
-    {
-      "title": "An American doctor with Ebola was evacuated to Berlin. The U.S. has biocontainment units.",
-      "link": "https://www.celinegounder.com/p/ebola-american-doctor-evacuated-berlin-us-response",
-      "author": "Celine Gounder, MD",
-      "sourceName": "What I can and Can't Say on TV",
-      "date": "2026-05-19T22:05:00.000Z",
-      "image": "https://substackcdn.com/image/youtube/w_728,c_limit/157yAIulUhw",
-      "excerpt": "What happened on Tuesday: the medevac, the 50 clinics, and what the State Department said about USAID.",
-      "brief": "",
-      "kicker": "",
-      "tags": []
-    },
-    {
-      "title": "American contracts Ebola in DRC, headed to Germany with other exposed Americans. Expert analysis.",
-      "link": "https://insidemedicine.substack.com/p/american-contracts-ebola-in-drc-headed",
-      "author": "Jeremy Faust, MD",
-      "sourceName": "Inside Medicine",
-      "date": "2026-05-19T14:00:34.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!wH19!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4af20558-dc31-43bb-a2c1-33b3dbc660ce_1536x1024.png",
-      "excerpt": "Dr. Boghuma Titanji and I analyze the Trump administration’s new travel restrictions, the decision to send exposed Americans to Germany, and what the outbreak reveals about US readiness.",
       "brief": "",
       "kicker": "",
       "tags": []
