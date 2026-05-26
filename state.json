@@ -1,17 +1,17 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-26T15:25:39.398Z",
+  "generatedAt": "2026-05-26T15:30:59.306Z",
   "generatedBy": "Editor",
   "tagline": "Ebola has been building for months, Outside forces have made it far worse.",
   "hero": {
-    "title": "Ebola Update—May 24",
-    "link": "https://craigaspencer.substack.com/p/ebola-updatemay-24",
-    "author": "Craig Spencer MD",
-    "sourceName": "Craig’s Substack",
-    "date": "2026-05-24T15:05:17.000Z",
-    "image": "https://substackcdn.com/image/fetch/$s_!7pRA!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5c90e7f0-ef58-4f75-b1e1-35dee4c71ec9_1320x1330.png",
-    "excerpt": "Everything I Think You Need to Know",
-    "brief": "-Outbreak ~2-3 months old, true count ~2,000. Second-largest ever\n-No Bundibugyo vaccine. Ervebo and mAbs may help. Limited supply\n-Treatment center burnings recur when responders ignore burial customs",
+    "title": "Why Ebola Isn't Going to \"Go Airborne\"",
+    "link": "https://rasmussenretorts.substack.com/p/why-ebola-isnt-going-to-go-airborne",
+    "author": "Angela Rasmussen, PhD",
+    "sourceName": "Rasmussen Retorts",
+    "date": "2026-05-25T22:20:59.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!8KzM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8e4af39d-2696-4d24-b442-ab22a793787c_1600x900.png",
+    "excerpt": "And stop sounding so excited about it",
+    "brief": "Ebolaviruses don’t infect cells that stay in the respiratory tract\nInfectious ebolaviruses are mostly in the bloodstream\nnfectious ebolaviruses are not shed into the airway",
     "kicker": "",
     "tags": []
   },
@@ -55,18 +55,6 @@
   ],
   "recent": [
     {
-      "title": "Why Ebola Isn't Going to \"Go Airborne\"",
-      "link": "https://rasmussenretorts.substack.com/p/why-ebola-isnt-going-to-go-airborne",
-      "author": "Angela Rasmussen, PhD",
-      "sourceName": "Rasmussen Retorts",
-      "date": "2026-05-25T22:20:59.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!8KzM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8e4af39d-2696-4d24-b442-ab22a793787c_1600x900.png",
-      "excerpt": "And stop sounding so excited about it",
-      "brief": "",
-      "kicker": "",
-      "tags": []
-    },
-    {
       "title": "The Remarkable Proliferation of Cancer Immunotherapies",
       "link": "https://erictopol.substack.com/p/the-remarkable-proliferation-of-cancer",
       "author": "Eric Topol, MD",
@@ -75,6 +63,18 @@
       "image": "https://substackcdn.com/image/fetch/$s_!hrgB!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fde5ebc98-721f-454a-8f8c-17e3fe3ea9a7_1250x1590.heic",
       "excerpt": "On a Path to Interception—Prevention Vaccines",
       "brief": "",
+      "kicker": "",
+      "tags": []
+    },
+    {
+      "title": "Ebola Update—May 24",
+      "link": "https://craigaspencer.substack.com/p/ebola-updatemay-24",
+      "author": "Craig Spencer MD",
+      "sourceName": "Craig’s Substack",
+      "date": "2026-05-24T15:05:17.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!7pRA!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5c90e7f0-ef58-4f75-b1e1-35dee4c71ec9_1320x1330.png",
+      "excerpt": "Everything I Think You Need to Know",
+      "brief": "-Outbreak ~2-3 months old, true count ~2,000. Second-largest ever\n-No Bundibugyo vaccine. Ervebo and mAbs may help. Limited supply\n-Treatment center burnings recur when responders ignore burial customs",
       "kicker": "",
       "tags": []
     },
