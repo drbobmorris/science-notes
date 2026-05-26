@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-26T14:08:40.548Z",
+  "generatedAt": "2026-05-26T15:25:39.398Z",
   "generatedBy": "Editor",
   "tagline": "Ebola has been building for months, Outside forces have made it far worse.",
   "hero": {
@@ -17,6 +17,18 @@
   },
   "selected": [
     {
+      "title": "How much evidence is enough?",
+      "link": "https://alasdairmunro.substack.com/p/how-much-evidence-is-enough",
+      "author": "Alisdair Munro, MD",
+      "sourceName": "The Munro Report",
+      "date": "2026-05-26T11:10:51.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!xuKF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fef844d3f-f737-41a0-ae8e-a404490ccd30_1731x909.png",
+      "excerpt": "My thoughts on Adam Kucharski's recent piece on \"Aluminium\" grade evidence",
+      "brief": "On the nature of scientific evidence.\n- The correct interpretation of evidence is rarely binary.\n- The media demand simple, binary answers. \n- Gold standards weaponize a demand for certainty.\n",
+      "kicker": "",
+      "tags": []
+    },
+    {
       "title": "The Smartphone Minerals War That Destroyed Congo's Health System — Just in Time for Ebola",
       "link": "https://www.celinegounder.com/p/congo-health-system-collapse-ebola-300000-deaths",
       "author": "Celine Gounder, MD",
@@ -29,26 +41,14 @@
       "tags": []
     },
     {
-      "title": "The Burden of Caution",
-      "link": "https://blanphear.substack.com/p/the-burden-of-caution",
-      "author": "Bruce Lanphear, MD",
-      "sourceName": "Plagues, Pollution & Poverty",
-      "date": "2026-05-19T10:03:21.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!H4DY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5fe4febb-235b-440c-835c-f9b477ec3a88_1024x1536.jpeg",
-      "excerpt": "When scientific humility becomes public confusion",
-      "brief": "Epidemiology Buries the Lede\n-Epidemiology relies on cautious language re causality\n-Tobacco playbook weaponizes scientific caution against science. Asbestos, lead, climate followed the same arc.\n-Sometimes the honest word is \"causes.\" ",
-      "kicker": "",
-      "tags": []
-    },
-    {
-      "title": "American contracts Ebola in DRC, headed to Germany with other exposed Americans. Expert analysis.",
-      "link": "https://insidemedicine.substack.com/p/american-contracts-ebola-in-drc-headed",
-      "author": "Jeremy Faust, MD",
-      "sourceName": "Inside Medicine",
-      "date": "2026-05-19T14:00:34.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!wH19!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4af20558-dc31-43bb-a2c1-33b3dbc660ce_1536x1024.png",
-      "excerpt": "Dr. Boghuma Titanji and I analyze the Trump administration’s new travel restrictions, the decision to send exposed Americans to Germany, and what the outbreak reveals about US readiness.",
-      "brief": "US Isolation\n-Trump blocks entry of infected American doctor and family\n- US bans non-US passport holders from DRC, Uganda, Sudan against WHO guidance\n- US withdrawal means WHO can mobilize only $500K from its emergency fund",
+      "title": "World Cup’s hidden health operation",
+      "link": "https://yourlocalepidemiologist.substack.com/p/world-cups-hidden-health-operation",
+      "author": "Katelyn Jetelina, PhD",
+      "sourceName": "Your Local Epidemiologist",
+      "date": "2026-05-20T10:30:56.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!xBUC!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F33915f8d-dc62-499d-9844-af94bef81b44_2000x1125.jpeg",
+      "excerpt": "YLE behind the scenes",
+      "brief": "Ebola and the hantavirus outbreak both highlight the dangerous dysfunction created by the US withdrawal from WHO. Add the World Cup to that list.",
       "kicker": "",
       "tags": []
     }
@@ -188,6 +188,11 @@
         "name": "Craig’s Substack",
         "author": "Craig Spencer MD",
         "url": "https://craigaspencer.substack.com/feed/"
+      },
+      {
+        "name": "The Munro Report",
+        "author": "Alisdair Munro, MD",
+        "url": "https://alasdairmunro.substack.com/feed/"
       }
     ],
     "writers": [
