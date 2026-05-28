@@ -1,19 +1,21 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-28T16:49:38.320Z",
+  "generatedAt": "2026-05-28T17:07:30.968Z",
   "generatedBy": "Editor",
   "tagline": "Ebola has been building for months, Outside forces have made it far worse.",
   "hero": {
-    "title": "The Smartphone Minerals War That Destroyed Congo's Health System — Just in Time for Ebola",
-    "link": "https://www.celinegounder.com/p/congo-health-system-collapse-ebola-300000-deaths",
-    "author": "Celine Gounder, MD",
-    "sourceName": "What I can and Can't Say on TV",
-    "date": "2026-05-18T11:29:40.000Z",
-    "image": "https://substackcdn.com/image/fetch/$s_!bT7o!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1f984424-bf22-47e0-99a4-5a007529f1de_1024x559.png",
-    "excerpt": "Rwanda’s mineral extraction, America’s aid cuts, and the most money-driven conflict one epidemiologist has ever seen.",
-    "brief": "The Story Behind Ebola\n-USAID 2025 freeze plus armed conflict driven by demand for rare earth metals hits East Congo the same week\n-Resulting destruction of health system caused 300,000 excess deaths over the past year\n-Then Ebola hit",
-    "kicker": "",
-    "tags": []
+    "title": "Evaluation Theater",
+    "link": "https://elizabethginexi.substack.com/p/evaluation-theater",
+    "author": "Elizabeth Ginexi, PhD",
+    "sourceName": "Elizabeth Ginexi",
+    "date": "2026-05-26T15:31:02.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!Zv1p!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1f5e9cfb-c883-4b92-950e-a9c35991c01a_1408x768.png",
+    "excerpt": "NIH's Gold Standard Science Plan Promised a Make-Believe Evaluation Strategy",
+    "brief": "•\tImplementation science was created to assess implementation of proven technologies\n•\tNIH proposed to use it to evaluate “planned NIH initiatives”\n•\t9 months later, no report\n•\tNot science. Evaluation theater\n",
+    "kicker": "POLICY",
+    "tags": [
+      "Policy"
+    ]
   },
   "selected": [
     {
@@ -74,20 +76,6 @@
       ]
     },
     {
-      "title": "Evaluation Theater",
-      "link": "https://elizabethginexi.substack.com/p/evaluation-theater",
-      "author": "Elizabeth Ginexi, PhD",
-      "sourceName": "Elizabeth Ginexi",
-      "date": "2026-05-26T15:31:02.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!Zv1p!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1f5e9cfb-c883-4b92-950e-a9c35991c01a_1408x768.png",
-      "excerpt": "NIH's Gold Standard Science Plan Promised a Make-Believe Evaluation Strategy",
-      "brief": "•\tImplementation science was created to assess implementation of proven technologies\n•\tNIH proposed to use it to evaluate “planned NIH initiatives”\n•\t9 months later, no report\n•\tNot science. Evaluation theater\n",
-      "kicker": "POLICY",
-      "tags": [
-        "Policy"
-      ]
-    },
-    {
       "title": "The Remarkable Proliferation of Cancer Immunotherapies",
       "link": "https://erictopol.substack.com/p/the-remarkable-proliferation-of-cancer",
       "author": "Eric Topol, MD",
@@ -124,6 +112,22 @@
       "tags": [
         "Environmental Health",
         "Water"
+      ]
+    },
+    {
+      "title": "Why Citizenship-Based Travel Bans Fail the Precautionary Principle",
+      "link": "https://www.celinegounder.com/p/who-gets-to-be-cautious",
+      "author": "Celine Gounder, MD",
+      "sourceName": "What I can and Can't Say on TV",
+      "date": "2026-05-23T16:17:45.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!NMP6!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1efcd1ff-09a8-4572-a651-76aff84b43f8_1024x559.png",
+      "excerpt": "From HIV to COVID to Ebola: the precautionary principle has been applied more aggressively to foreigners than to citizens for decades.",
+      "brief": "",
+      "kicker": "EBOLA",
+      "tags": [
+        "Ebola",
+        "COVID",
+        "Policy"
       ]
     }
   ],
