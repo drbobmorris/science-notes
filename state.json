@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-28T17:07:30.968Z",
+  "generatedAt": "2026-05-28T17:08:46.854Z",
   "generatedBy": "Editor",
   "tagline": "Ebola has been building for months, Outside forces have made it far worse.",
   "hero": {
@@ -27,7 +27,7 @@
       "image": "https://substackcdn.com/image/fetch/$s_!xuKF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fef844d3f-f737-41a0-ae8e-a404490ccd30_1731x909.png",
       "excerpt": "My thoughts on Adam Kucharski's recent piece on \"Aluminium\" grade evidence",
       "brief": "On the nature of scientific evidence.\n- The correct interpretation of evidence is rarely binary.\n- The media demand simple, binary answers. \n- Gold standards weaponize a demand for certainty.\n",
-      "kicker": "",
+      "kicker": "Scientific Evidence",
       "tags": []
     },
     {
@@ -55,7 +55,7 @@
       "image": "https://substackcdn.com/image/fetch/$s_!8KzM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8e4af39d-2696-4d24-b442-ab22a793787c_1600x900.png",
       "excerpt": "And stop sounding so excited about it",
       "brief": "Ebolaviruses don’t infect cells that stay in the respiratory tract\nInfectious ebolaviruses are mostly in the bloodstream\nnfectious ebolaviruses are not shed into the airway",
-      "kicker": "",
+      "kicker": "Infectious Disease",
       "tags": []
     }
   ],
