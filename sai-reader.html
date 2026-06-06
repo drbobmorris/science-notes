@@ -3169,7 +3169,8 @@
       if (el) el.remove();
     }
 
-    const heroItem = resolveItem(frontpage.heroUrl);
+    function exportFrontPageJson() {
+      const heroItem = resolveItem(frontpage.heroUrl);
       const selectedItems = (frontpage.selectedUrls || []).map(resolveItem);
       const recents = [];
 
