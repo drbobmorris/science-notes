@@ -1,0 +1,4095 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  SAI READER. Editorial triage tool.
+  A working surface for Science Notes weekly issue prep.
+  ============================================================
+
+  HOW TO USE
+
+  1. Open this file via a local server (VS Code Live Server,
+     `python3 -m http.server`) or hosted on the web. Loading
+     directly via file:// will fail because the CORS proxy
+     refuses requests with a null origin.
+  2. Feeds load on first visit. Refresh button forces a re-fetch.
+  3. For each item: add tags (free-text, comma or Enter to add),
+     star it, archive it. Tag suggestions auto-complete from
+     tags you've used before.
+  4. Switch to the "Picks" tab to see your starred items with a
+     tag cloud and an items list — your worksheet for the issue.
+
+  EDITING THE FEED LIST
+
+  Use the Settings tab. There's an "Add a feed" form for each
+  group (Scientists, Writers) and a Remove button next to each
+  existing feed. Your edits are stored in this browser's
+  localStorage and override the seed defaults baked into the
+  file. A "Reset to defaults" button restores the seed list.
+
+  TAGS
+
+  Tags are free-text. Type one and hit Enter or comma. Click a
+  tag chip to remove it. Existing tags appear as autocomplete
+  suggestions as you type. The vocabulary emerges from your
+  actual usage — there's no fixed list.
+
+  STORAGE
+
+  All state lives in browser localStorage on this device.
+  Key prefix: "sai-reader-". Clear via DevTools or the
+  "Reset all triage" button in Settings.
+
+  CORS
+
+  Feed fetching tries multiple public CORS proxies in cascade:
+  corsproxy.io first, then api.allorigins.win as fallback. If
+  one returns an error or rate-limits, the next is tried. To
+  change the order or add a proxy, search for "PROXIES" in the
+  script.
+  ============================================================
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAI Reader — Editorial triage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1613;
+      --ink-soft: #3a342f;
+      --ink-faint: #6b6358;
+      --paper: #f7f3ec;
+      --paper-warm: #efe9dd;
+      --paper-card: #fffdf7;
+      --rule: #1a1613;
+      --rule-soft: #d4cab5;
+      --rule-faint: #e6dfce;
+      --accent: #7a1f2b;
+      --accent-dk: #5a151f;
+      --gold: #b08947;
+      --gold-soft: #ebd9b0;
+      --green: #2d5a3d;
+      --green-soft: #d4e4d8;
+      --amber: #b8702e;
+      --slate: #4a5560;
+      --slate-soft: #d8dde2;
+
+      --serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+      --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "ss01", "kern";
+    }
+
+    /* ─── Masthead ──────────────────────────────────────────── */
+    .masthead {
+      border-bottom: 3px double var(--rule);
+      background: var(--paper);
+      padding: 1.4rem 2rem 1rem;
+    }
+
+    .masthead-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      font-variation-settings: "opsz" 144;
+    }
+
+    .brand .accent {
+      color: var(--accent);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .brand .stop {
+      color: var(--accent);
+    }
+
+    .tagline {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-top: 0.2rem;
+      font-weight: 500;
+    }
+
+    .masthead-meta {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+      text-align: right;
+    }
+
+    .masthead-meta .last-fetch {
+      display: block;
+    }
+
+    .masthead-meta button {
+      margin-top: 0.4rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .masthead-meta button:hover {
+      background: var(--accent);
+    }
+
+    .masthead-meta button:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+
+    /* ─── Tabs ──────────────────────────────────────────────── */
+    .tabs {
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule-soft);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .tabs-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-list {
+      display: flex;
+      gap: 0;
+    }
+
+    .tab {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      background: none;
+      border: none;
+      padding: 1rem 1.4rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .tab:hover {
+      color: var(--ink);
+    }
+
+    .tab.active {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab .count {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--ink-faint);
+      margin-left: 0.4rem;
+      font-weight: 400;
+    }
+
+    .tab.active .count {
+      color: var(--accent);
+    }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      padding: 0.6rem 0;
+    }
+
+    .filter-bar select,
+    .filter-bar input[type=text] {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      padding: 0.35rem 0.55rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper-card);
+      color: var(--ink);
+      border-radius: 2px;
+    }
+
+    .filter-bar input[type=text] {
+      min-width: 180px;
+    }
+
+    .filter-bar label {
+      font-weight: 500;
+      color: var(--ink-faint);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+    }
+
+    /* ─── Main column ───────────────────────────────────────── */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.6rem 2rem 4rem;
+    }
+
+    .section-divider {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--ink);
+      border-bottom: 1px solid var(--rule-soft);
+      padding-bottom: 0.4rem;
+      margin: 2rem 0 1rem;
+      font-variation-settings: "opsz" 144;
+    }
+
+    .section-divider .count {
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+      margin-left: 0.6rem;
+      font-weight: 400;
+    }
+
+    /* ─── Item card ─────────────────────────────────────────── */
+    .item-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 130px 1fr auto;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--paper-card);
+      border: 1px solid var(--rule-faint);
+      border-radius: 3px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+
+    .item:hover {
+      border-color: var(--rule-soft);
+      box-shadow: 0 2px 8px rgba(26, 22, 19, 0.05);
+    }
+
+    .item.starred {
+      border-left: 3px solid var(--gold);
+      background: linear-gradient(to right, rgba(176, 137, 71, 0.04) 0%, var(--paper-card) 30%);
+    }
+
+    .item.archived {
+      opacity: 0.45;
+    }
+
+    .item.archived:hover {
+      opacity: 1;
+    }
+
+    .item-thumb {
+      width: 130px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 2px;
+      background: var(--paper-warm);
+      display: block;
+    }
+
+    .item-thumb-placeholder {
+      width: 130px;
+      height: 90px;
+      background: var(--paper-warm);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.08em;
+    }
+
+    .item-body {
+      min-width: 0;
+    }
+
+    .item-source {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .item-source .group-tag {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--ink-faint);
+      margin-left: 0.4rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+    }
+
+    .item-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
+      font-variation-settings: "opsz" 32;
+    }
+
+    .item-title a {
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .item-title a:hover {
+      color: var(--accent);
+    }
+
+    .item-excerpt {
+      font-family: var(--serif);
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      margin-bottom: 0.5rem;
+      font-variation-settings: "opsz" 14;
+      /* clamp to 3 lines */
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .item-meta {
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      color: var(--ink-faint);
+    }
+
+    .item-meta .author {
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+
+    .item-meta .dot {
+      opacity: 0.4;
+      margin: 0 0.4rem;
+    }
+
+    .item-meta .date {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Editorial brief inside an item card (only shown when starred) */
+    .item-brief {
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      border-top: 1px dotted var(--rule-faint);
+    }
+
+    .item-brief-label {
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .item-brief-label .hint {
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: none;
+      color: var(--ink-faint);
+      font-style: italic;
+    }
+
+    .item-brief textarea {
+      width: 100%;
+      font-family: var(--serif);
+      font-size: 0.88rem;
+      padding: 0.45rem 0.6rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper);
+      color: var(--ink);
+      border-radius: 2px;
+      resize: vertical;
+      min-height: 60px;
+      line-height: 1.45;
+      font-variation-settings: "opsz" 14;
+    }
+
+    .item-brief textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold);
+    }
+
+    .item-brief textarea::placeholder {
+      color: var(--ink-faint);
+      font-style: italic;
+    }
+
+    /* ─── Item controls ─────────────────────────────────────── */
+    .item-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.4rem;
+      min-width: 200px;
+    }
+
+    /* Tag editor */
+    .tag-editor {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 0.35rem 0.4rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper-card);
+      border-radius: 2px;
+      min-height: 2.1rem;
+      align-items: center;
+      cursor: text;
+      position: relative;
+    }
+
+    .tag-editor:focus-within {
+      border-color: var(--ink);
+      box-shadow: 0 0 0 1px var(--ink);
+    }
+
+    .tag-editor.has-tags {
+      background: linear-gradient(to right, rgba(45, 90, 61, 0.04) 0%, var(--paper-card) 100%);
+    }
+
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.18rem 0.5rem;
+      background: var(--green-soft);
+      color: var(--green);
+      border-radius: 10px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .tag-chip .x {
+      cursor: pointer;
+      opacity: 0.55;
+      font-size: 0.85rem;
+      line-height: 1;
+      margin-left: 0.1rem;
+      user-select: none;
+    }
+
+    .tag-chip .x:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    .tag-input {
+      flex: 1;
+      min-width: 80px;
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      outline: none;
+      padding: 0.15rem 0.2rem;
+    }
+
+    .tag-input::placeholder {
+      color: var(--ink-faint);
+      font-style: italic;
+    }
+
+    /* Autocomplete dropdown */
+    .tag-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      background: var(--paper-card);
+      border: 1px solid var(--ink);
+      border-top: none;
+      border-radius: 0 0 2px 2px;
+      max-height: 180px;
+      overflow-y: auto;
+      box-shadow: 0 4px 12px rgba(26, 22, 19, 0.12);
+    }
+
+    .tag-suggestion {
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      padding: 0.35rem 0.55rem;
+      cursor: pointer;
+      color: var(--ink);
+      border-bottom: 1px solid var(--rule-faint);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tag-suggestion:last-child {
+      border-bottom: none;
+    }
+
+    .tag-suggestion:hover,
+    .tag-suggestion.active {
+      background: var(--paper-warm);
+    }
+
+    .tag-suggestion .freq {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--ink-faint);
+    }
+
+    .tag-suggestion.create-new {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .icon-btn {
+      flex: 1;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.4rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper-card);
+      color: var(--ink-soft);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    .icon-btn.active.star {
+      background: var(--gold-soft);
+      border-color: var(--gold);
+      color: var(--accent-dk);
+    }
+
+    .icon-btn.active.archive {
+      background: var(--slate-soft);
+      border-color: var(--slate);
+      color: var(--slate);
+    }
+
+    /* ─── Loading / empty states ────────────────────────────── */
+    .feed-status {
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      color: var(--ink-faint);
+      padding: 1rem;
+      text-align: center;
+      background: var(--paper-warm);
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .feed-status.error {
+      color: var(--accent);
+      background: rgba(122, 31, 43, 0.06);
+    }
+
+    .feed-error-list {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      background: rgba(122, 31, 43, 0.05);
+      padding: 0.7rem 1rem;
+      border-left: 3px solid var(--accent);
+      margin-bottom: 1rem;
+      border-radius: 2px;
+    }
+
+    .feed-error-list .err-head {
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--accent-dk);
+      letter-spacing: 0.04em;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+    }
+
+    .feed-error-list ul {
+      list-style: none;
+    }
+
+    .feed-error-list li {
+      padding: 0.35rem 0;
+      border-bottom: 1px dotted rgba(122, 31, 43, 0.2);
+    }
+
+    .feed-error-list li:last-child {
+      border-bottom: none;
+    }
+
+    .feed-error-list .err-name {
+      color: var(--accent-dk);
+      font-weight: 600;
+    }
+
+    .feed-error-list .err-msg {
+      color: var(--accent);
+    }
+
+    .feed-error-list .err-url {
+      font-size: 0.66rem;
+      color: var(--ink-faint);
+      word-break: break-all;
+    }
+
+    .feed-error-list details {
+      margin-top: 0.2rem;
+    }
+
+    .feed-error-list summary {
+      cursor: pointer;
+      color: var(--ink-soft);
+      font-size: 0.66rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 0.15rem 0;
+      user-select: none;
+    }
+
+    .feed-error-list summary:hover {
+      color: var(--ink);
+    }
+
+    .feed-error-list .err-detail {
+      background: var(--paper-card);
+      border: 1px solid var(--rule-faint);
+      padding: 0.55rem 0.7rem;
+      margin-top: 0.3rem;
+      border-radius: 2px;
+      color: var(--ink-soft);
+      font-size: 0.7rem;
+      line-height: 1.5;
+    }
+
+    .feed-error-list .err-snippet {
+      background: var(--paper);
+      border-left: 2px solid var(--rule-soft);
+      padding: 0.35rem 0.55rem;
+      margin-top: 0.3rem;
+      font-size: 0.66rem;
+      color: var(--ink-faint);
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .empty {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--ink-faint);
+      padding: 3rem 1rem;
+      text-align: center;
+      font-size: 1rem;
+      font-variation-settings: "opsz" 32;
+    }
+
+    /* ─── Picks view ────────────────────────────────────────── */
+    .tag-cloud-wrap {
+      background: var(--paper-card);
+      border: 1px solid var(--rule-faint);
+      border-radius: 3px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Collapsible cloud panel for main tabs */
+    .cloud-panel {
+      background: var(--paper-card);
+      border: 1px solid var(--rule-faint);
+      border-radius: 3px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+    }
+
+    .cloud-panel-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.65rem 1rem;
+      background: var(--paper-warm);
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-align: left;
+    }
+
+    .cloud-panel-toggle:hover {
+      color: var(--ink);
+    }
+
+    .cloud-panel-toggle .chevron {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--ink-faint);
+      transition: transform 0.15s;
+    }
+
+    .cloud-panel.collapsed .chevron {
+      transform: rotate(-90deg);
+    }
+
+    .cloud-panel-toggle .summary {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--ink-faint);
+      letter-spacing: 0.04em;
+      text-transform: none;
+      margin-left: 0.6rem;
+    }
+
+    .cloud-panel-body {
+      padding: 0.9rem 1.2rem 1rem;
+      border-top: 1px solid var(--rule-faint);
+    }
+
+    .cloud-panel.collapsed .cloud-panel-body {
+      display: none;
+    }
+
+    .cloud-panel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .cloud-toggle-group {
+      display: inline-flex;
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .cloud-toggle-group button {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--paper-card);
+      color: var(--ink-faint);
+      border: none;
+      padding: 0.32rem 0.65rem;
+      cursor: pointer;
+      border-right: 1px solid var(--rule-soft);
+    }
+
+    .cloud-toggle-group button:last-child {
+      border-right: none;
+    }
+
+    .cloud-toggle-group button:hover {
+      color: var(--ink);
+    }
+
+    .cloud-toggle-group button.active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .cloud-clear {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .cloud-clear:hover {
+      text-decoration: underline;
+    }
+
+    .tag-cloud-head {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 0.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .tag-cloud-head .clear-filter {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .tag-cloud-head .clear-filter:hover {
+      text-decoration: underline;
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.5rem;
+      align-items: center;
+    }
+
+    .cloud-tag {
+      font-family: var(--sans);
+      font-weight: 500;
+      padding: 0.25rem 0.7rem;
+      background: var(--paper-warm);
+      color: var(--ink);
+      border-radius: 14px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.12s;
+      user-select: none;
+    }
+
+    .cloud-tag:hover {
+      background: var(--gold-soft);
+      border-color: var(--gold);
+    }
+
+    .cloud-tag.active {
+      background: var(--accent);
+      color: var(--paper);
+      border-color: var(--accent);
+    }
+
+    .cloud-tag .freq {
+      font-family: var(--mono);
+      font-size: 0.7em;
+      opacity: 0.6;
+      margin-left: 0.3em;
+      font-weight: 400;
+    }
+
+    .picks-list-head {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: var(--paper-warm);
+      padding: 0.6rem 1rem;
+      border-left: 4px solid var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .picks-list-head .meta {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-faint);
+      font-weight: 400;
+      margin-left: 0.6rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* Filter bar tag chips */
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      align-items: center;
+    }
+
+    .filter-tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      background: var(--accent);
+      color: var(--paper);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .filter-tag-chip .x {
+      opacity: 0.7;
+    }
+
+    .filter-tag-chip:hover .x {
+      opacity: 1;
+    }
+
+    /* ─── Settings page ─────────────────────────────────────── */
+    .settings {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .settings h2 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 1.2rem 0 0.6rem;
+      font-variation-settings: "opsz" 144;
+    }
+
+    .settings p {
+      color: var(--ink-soft);
+      margin-bottom: 0.8rem;
+    }
+
+    .feed-list {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      background: var(--paper-card);
+      border: 1px solid var(--rule-faint);
+      padding: 0.8rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .feed-list .feed-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px dotted var(--rule-faint);
+    }
+
+    .feed-list .feed-row:last-child {
+      border-bottom: none;
+    }
+
+    .feed-list .feed-name {
+      color: var(--ink);
+      font-weight: 500;
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+    .feed-list .feed-url {
+      color: var(--ink-faint);
+      font-size: 0.72rem;
+    }
+
+    .feed-list .feed-author {
+      color: var(--ink-soft);
+      font-size: 0.74rem;
+      flex: 0 0 auto;
+    }
+
+    .feed-list .feed-remove {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--paper-card);
+      color: var(--ink-faint);
+      border: 1px solid var(--rule-soft);
+      padding: 0.25rem 0.55rem;
+      cursor: pointer;
+      border-radius: 2px;
+      flex: 0 0 auto;
+    }
+
+    .feed-list .feed-remove:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(122, 31, 43, 0.05);
+    }
+
+    .feed-list .feed-actions {
+      display: flex;
+      gap: 0.3rem;
+      flex: 0 0 auto;
+    }
+
+    .feed-list .feed-edit {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--paper-card);
+      color: var(--ink-faint);
+      border: 1px solid var(--rule-soft);
+      padding: 0.25rem 0.55rem;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .feed-list .feed-edit:hover {
+      border-color: var(--ink);
+      color: var(--ink);
+      background: var(--paper-warm);
+    }
+
+    .feed-list .feed-row.editing {
+      display: block;
+      padding: 0.7rem 0.4rem;
+      background: var(--paper-warm);
+      border-radius: 2px;
+      margin: 0.2rem -0.4rem;
+      border-bottom: 1px dotted var(--rule-faint);
+    }
+
+    .feed-edit-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem;
+      font-family: var(--sans);
+    }
+
+    .feed-edit-form .row-full {
+      grid-column: 1 / -1;
+    }
+
+    .feed-edit-form label {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 0.15rem;
+    }
+
+    .feed-edit-form input {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      padding: 0.35rem 0.5rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper-card);
+      color: var(--ink);
+      border-radius: 2px;
+    }
+
+    .feed-edit-form input:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow: 0 0 0 1px var(--ink);
+    }
+
+    .feed-edit-form .feed-edit-buttons {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      margin-top: 0.2rem;
+    }
+
+    .feed-edit-save {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      padding: 0.4rem 0.85rem;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .feed-edit-save:hover {
+      background: var(--accent);
+    }
+
+    .feed-edit-cancel {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: var(--paper-card);
+      color: var(--ink-faint);
+      border: 1px solid var(--rule-soft);
+      padding: 0.4rem 0.85rem;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .feed-edit-cancel:hover {
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .feed-edit-msg {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+    }
+
+    /* Add-feed form */
+    .add-feed {
+      background: var(--paper-warm);
+      border: 1px dashed var(--rule-soft);
+      border-radius: 2px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .add-feed .row-full {
+      grid-column: 1 / -1;
+    }
+
+    .add-feed label {
+      display: block;
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 0.2rem;
+    }
+
+    .add-feed input {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      padding: 0.4rem 0.55rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper-card);
+      color: var(--ink);
+      border-radius: 2px;
+    }
+
+    .add-feed input:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow: 0 0 0 1px var(--ink);
+    }
+
+    .add-feed .add-feed-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .add-feed-btn {
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .add-feed-btn:hover {
+      background: var(--accent);
+    }
+
+    .add-feed-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .add-feed-msg {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+    }
+
+    .add-feed-msg.error {
+      color: var(--accent);
+    }
+
+    .add-feed-msg.ok {
+      color: var(--green);
+    }
+
+    .danger-btn {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: var(--paper-card);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .danger-btn:hover {
+      background: var(--accent);
+      color: var(--paper);
+    }
+
+    /* ─── Front Page builder ────────────────────────────────── */
+    .fp-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .fp-intro {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin-bottom: 1.5rem;
+      font-variation-settings: "opsz" 14;
+    }
+
+    .fp-section {
+      margin-bottom: 2rem;
+    }
+
+    .fp-section h2 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+      font-variation-settings: "opsz" 144;
+    }
+
+    .fp-section h2 em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent);
+    }
+
+    .fp-section p.help {
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      color: var(--ink-faint);
+      margin-bottom: 0.8rem;
+    }
+
+    .fp-tagline-input {
+      width: 100%;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper-card);
+      color: var(--ink);
+      border-radius: 2px;
+      font-variation-settings: "opsz" 14;
+    }
+
+    .fp-tagline-input:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow: 0 0 0 1px var(--ink);
+    }
+
+    /* Slot grid: hero on left, selected (3) stacked on right */
+    .fp-hero-area {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .fp-selected-area {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 721px) {
+      .fp-selected-area { grid-template-columns: repeat(3, 1fr); } /* 6 items => 2 rows of 3 */
+    }
+
+    .fp-slot {
+      background: var(--paper-card);
+      border: 1px dashed var(--rule-soft);
+      border-radius: 3px;
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-height: 180px;
+      position: relative;
+    }
+
+    .fp-slot.filled {
+      border-style: solid;
+      border-color: var(--rule-soft);
+    }
+
+    .fp-slot.hero {
+      min-height: 280px;
+    }
+
+    .fp-slot-label {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+
+    .fp-slot-empty {
+      color: var(--ink-faint);
+      font-style: italic;
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-variation-settings: "opsz" 14;
+    }
+
+    .fp-slot-empty button {
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 2px;
+      font-style: normal;
+    }
+
+    .fp-slot-empty button:hover {
+      background: var(--accent);
+    }
+
+    .fp-slot-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-height: 0;
+    }
+
+    .fp-slot-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 2px;
+      background: var(--paper-warm);
+    }
+
+    .fp-slot-noimg {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--paper-warm);
+      border: 1px dotted var(--rule-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.08em;
+      border-radius: 2px;
+    }
+
+    .fp-slot-kicker-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .fp-slot-kicker {
+      flex: 1;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper-card);
+      color: var(--accent);
+      border-radius: 2px;
+    }
+
+    .fp-slot-kicker:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow: 0 0 0 1px var(--ink);
+    }
+
+    .fp-slot-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      font-variation-settings: "opsz" 32;
+    }
+
+    .fp-slot.hero .fp-slot-title {
+      font-size: 1.5rem;
+    }
+
+    .fp-slot-title a {
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .fp-slot-title a:hover {
+      color: var(--accent);
+    }
+
+    .fp-slot-meta {
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      color: var(--ink-faint);
+    }
+
+    .fp-slot-meta .author {
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+
+    .fp-slot-actions {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: auto;
+    }
+
+    .fp-slot-action {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--paper-card);
+      color: var(--ink-faint);
+      border: 1px solid var(--rule-soft);
+      padding: 0.3rem 0.55rem;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .fp-slot-action:hover {
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .fp-slot-action.danger:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Editorial brief textarea inside slot */
+    .fp-slot-brief-label {
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-top: 0.3rem;
+    }
+
+    .fp-slot-brief {
+      width: 100%;
+      font-family: var(--serif);
+      font-size: 0.88rem;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid var(--rule-soft);
+      background: var(--paper-card);
+      color: var(--ink);
+      border-radius: 2px;
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.45;
+      font-variation-settings: "opsz" 14;
+    }
+
+    .fp-slot-brief:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow: 0 0 0 1px var(--ink);
+    }
+
+    .fp-slot-brief::placeholder {
+      color: var(--ink-faint);
+      font-style: italic;
+    }
+
+    /* Recent posts auto-list preview */
+    .fp-recent-list {
+      background: var(--paper-card);
+      border: 1px solid var(--rule-soft);
+      border-radius: 3px;
+      padding: 0.8rem 1rem;
+    }
+
+    .fp-recent-item {
+      display: flex;
+      gap: 0.6rem;
+      padding: 0.45rem 0;
+      border-bottom: 1px dotted var(--rule-faint);
+      align-items: baseline;
+    }
+
+    .fp-recent-item:last-child {
+      border-bottom: none;
+    }
+
+    .fp-recent-item .num {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--accent);
+      font-variation-settings: "opsz" 14;
+      width: 1.2rem;
+      flex: 0 0 auto;
+    }
+
+    .fp-recent-item .body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .fp-recent-item .title {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      color: var(--ink);
+      font-variation-settings: "opsz" 14;
+      line-height: 1.3;
+    }
+
+    .fp-recent-item .meta {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+      margin-top: 0.15rem;
+    }
+
+    /* Picker modal */
+    .fp-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 22, 19, 0.5);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .fp-modal {
+      background: var(--paper);
+      border: 1px solid var(--ink);
+      border-radius: 4px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 40px rgba(26, 22, 19, 0.3);
+    }
+
+    .fp-modal-head {
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--rule-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .fp-modal-head h3 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+      font-variation-settings: "opsz" 144;
+    }
+
+    .fp-modal-close {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-faint);
+      padding: 0.3rem 0.6rem;
+    }
+
+    .fp-modal-close:hover {
+      color: var(--ink);
+    }
+
+    .fp-modal-body {
+      padding: 1rem 1.4rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .fp-pick-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 0.8rem;
+      padding: 0.6rem;
+      border: 1px solid var(--rule-faint);
+      background: var(--paper-card);
+      border-radius: 2px;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+
+    .fp-pick-item:hover {
+      border-color: var(--ink);
+      background: var(--paper-warm);
+    }
+
+    .fp-pick-item img {
+      width: 80px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 2px;
+      background: var(--paper-warm);
+    }
+
+    .fp-pick-item .noimg {
+      width: 80px;
+      height: 56px;
+      background: var(--paper-warm);
+      border-radius: 2px;
+    }
+
+    .fp-pick-item .title {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      line-height: 1.25;
+      color: var(--ink);
+      font-variation-settings: "opsz" 14;
+      margin-bottom: 0.2rem;
+    }
+
+    .fp-pick-item .meta {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: var(--ink-faint);
+    }
+
+    .fp-pick-item .badge {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      align-self: center;
+      white-space: nowrap;
+    }
+
+    /* Export bar */
+    .fp-export-bar {
+      position: sticky;
+      bottom: 0;
+      background: var(--paper);
+      border-top: 1px solid var(--rule);
+      padding: 0.9rem 0;
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .fp-export-status {
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      color: var(--ink-faint);
+    }
+
+    .fp-export-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .fp-export-btn {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.55rem 1.1rem;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 1px solid var(--ink);
+    }
+
+    .fp-export-btn.primary {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .fp-export-btn.primary:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .fp-export-btn.secondary {
+      background: var(--paper-card);
+      color: var(--ink);
+    }
+
+    .fp-export-btn.secondary:hover {
+      background: var(--paper-warm);
+    }
+
+    @media (max-width: 720px) {
+      .fp-hero-area {
+        grid-template-columns: 1fr;
+      }
+
+      .fp-selected-area {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ─── Hidden ────────────────────────────────────────────── */
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 720px) {
+      .item {
+        grid-template-columns: 1fr;
+      }
+
+      .item-thumb,
+      .item-thumb-placeholder {
+        width: 100%;
+        height: 160px;
+      }
+
+      .item-controls {
+        flex-direction: row;
+        min-width: 0;
+      }
+
+      .cat-select {
+        flex: 2;
+      }
+
+      .btn-row {
+        flex: 1;
+      }
+
+      .masthead-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .masthead-meta {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<script src="sai-reader-api-client.js"></script>
+
+<body>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div>
+        <div class="brand">SAI <span class="accent">Reader</span><span class="stop">.</span></div>
+        <div class="tagline">Editorial triage · Science Accountability Institute</div>
+      </div>
+      <div class="masthead-meta">
+        <span class="last-fetch" id="last-fetch">Loading feeds…</span>
+        <button id="refresh-btn">↻ Refresh feeds</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="tabs-inner">
+      <div class="tab-list" id="tab-list">
+        <button class="tab active" data-tab="scientists">Scientists <span class="count"
+            id="count-scientists">·</span></button>
+        <button class="tab" data-tab="writers">Science Writers <span class="count" id="count-writers">·</span></button>
+        <button class="tab" data-tab="all">All <span class="count" id="count-all">·</span></button>
+        <button class="tab" data-tab="picks">★ Picks <span class="count" id="count-picks">·</span></button>
+        <button class="tab" data-tab="frontpage">Front Page</button>
+        <button class="tab" data-tab="settings">Settings</button>
+      </div>
+      <div class="filter-bar" id="filter-bar">
+        <label>Tags</label>
+        <div class="filter-tags" id="filter-tags"></div>
+        <label for="search-input">Search</label>
+        <input type="text" id="search-input" placeholder="title, author, tag…">
+        <label><input type="checkbox" id="show-archived"> Show archived</label>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div id="view-feed">
+      <div id="feed-status" class="feed-status">Loading feeds…</div>
+      <div id="feed-errors" class="feed-error-list hidden"></div>
+      <div id="cloud-panel-mount"></div>
+      <div id="item-grid" class="item-grid"></div>
+    </div>
+    <div id="view-picks" class="hidden"></div>
+    <div id="view-frontpage" class="hidden"></div>
+    <div id="view-settings" class="hidden"></div>
+  </main>
+
+  <script>
+    /* ============================================================
+       FEEDS — these are the seed defaults. Once you add or remove
+       feeds in Settings, your edits are stored in localStorage and
+       override the defaults from then on. To restore the defaults,
+       use the "Reset to default feed list" button in Settings.
+       ============================================================ */
+    const SCIENTIST_FEEDS_DEFAULTS = [
+      { name: "The Skeptical Scientist", author: "Bob Morris, MD, PhD", url: "https://drbobmorris.substack.com/feed" },
+      { name: "Rasmussen Retorts", author: "Angela Rasmussen, PhD", url: "https://rasmussenretorts.substack.com/feed" },
+      { name: "Plagues, Pollution & Poverty", author: "Bruce Lanphear, MD", url: "https://blanphear.substack.com/feed" },
+      { name: "Science-Based Medicine", author: "Jonathan Howard et al.", url: "https://sciencebasedmedicine.org/feed/" },
+      { name: "Making Science Make Sense", author: "Jessica Malaty Rivera, MS", url: "https://makingsciencemakesense.substack.com/feed" }
+    ];
+
+    const WRITER_FEEDS_DEFAULTS = [
+      { name: "Important Context", author: "Walker Bragman", url: "https://www.importantcontext.news/feed" },
+      { name: "Counter Disinformation Project", author: "Counter Disinformation Project", url: "https://counterdisinformationproject.substack.com/feed" },
+      { name: "Pandemic Accountability Index", author: "JJ Kogburne", url: "https://www.panaccindex.info/feed" }
+    ];
+
+    const FEEDS_STORAGE_KEY = "sai-reader-feeds-v1";
+
+    // Mutable arrays — populated from localStorage if present, else defaults
+    let SCIENTIST_FEEDS = [];
+    let WRITER_FEEDS = [];
+
+    function loadFeeds() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(FEEDS_STORAGE_KEY));
+        if (raw && Array.isArray(raw.scientists) && Array.isArray(raw.writers)) {
+          SCIENTIST_FEEDS = raw.scientists.slice();
+          WRITER_FEEDS = raw.writers.slice();
+          return;
+        }
+      } catch (e) { /* fall through */ }
+      SCIENTIST_FEEDS = SCIENTIST_FEEDS_DEFAULTS.slice();
+      WRITER_FEEDS = WRITER_FEEDS_DEFAULTS.slice();
+    }
+
+    function saveFeeds() {
+      localStorage.setItem(FEEDS_STORAGE_KEY, JSON.stringify({
+        scientists: SCIENTIST_FEEDS,
+        writers: WRITER_FEEDS
+      }));
+    }
+
+    function resetFeedsToDefaults() {
+      localStorage.removeItem(FEEDS_STORAGE_KEY);
+      loadFeeds();
+    }
+
+    loadFeeds();
+
+    /* ============================================================
+       CONFIG
+       ============================================================ */
+    // Proxy cascade. We try each in order until one succeeds.
+    // Each entry has a build(url) that returns the proxied URL,
+    // and a "name" used in error reporting.
+    const PROXIES = [
+      { name: "corsproxy.io", build: u => "https://corsproxy.io/?" + encodeURIComponent(u) },
+      { name: "allorigins.win", build: u => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u) }
+    ];
+    // Back-compat: some places (Settings UI) read PROXY_URL for display.
+    const PROXY_URL = PROXIES[0].name + " (with fallbacks)";
+    const TIME_WINDOW_DAYS = 14;
+    const STORAGE_KEY = "sai-reader-v2";
+    const STORAGE_KEY_OLD = "sai-reader-v1";   // for one-time migration
+    const FEED_CACHE_KEY = "sai-reader-feed-cache-v1";
+    const FEED_CACHE_TTL_MS = 30 * 60 * 1000; // 30 min
+
+    /* ============================================================
+       STATE
+       ============================================================ */
+    let allItems = [];          // all parsed items, both groups
+    let triage = loadTriage();  // { [url]: { tags: [], starred, archived } }
+    let activeTab = "scientists";
+    let activeTagFilters = [];  // array of tag strings; AND semantics
+    let searchQuery = "";
+    let showArchived = false;
+    let feedErrors = [];
+    // Cloud panel UI prefs (persisted)
+    let cloudCollapsed = (localStorage.getItem("sai-reader-cloud-collapsed") === "1");
+    let cloudScope = localStorage.getItem("sai-reader-cloud-scope") || "active"; // "active" | "all"
+    // Settings: which feed row is currently in edit mode? "{prefix}-{idx}" or null.
+    let editingFeed = null;
+
+    // Front Page configuration: which posts go in which slots, plus tagline.
+    // Stored as URLs (the post link is the canonical id).
+    const FP_STORAGE_KEY = "sai-reader-frontpage-v1";
+    let frontpage = loadFrontPage();
+    // State for the "pick a starred post" modal
+    let fpPickerOpen = null; // null | { slot: "hero" | { type:"selected", idx:0..2 } }
+
+    function loadFrontPage() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(FP_STORAGE_KEY));
+        if (raw && typeof raw === "object") {
+          return {
+            tagline: raw.tagline || "",
+            heroUrl: raw.heroUrl || "",          // pinned Featured post
+            selectedUrls: Array.isArray(raw.selectedUrls) ? raw.selectedUrls.slice(0, 6) : [],
+            recentCount: raw.recentCount || 6
+          };
+        }
+      } catch (e) { /* ignore */ }
+      return { tagline: "", heroUrl: "", selectedUrls: [], recentCount: 6 };
+    }
+    function saveFrontPage() {
+      localStorage.setItem(FP_STORAGE_KEY, JSON.stringify(frontpage));
+    }
+
+    function loadTriage() {
+      // Try v2 first
+      try {
+        const v2 = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (v2) return v2;
+      } catch (e) { /* ignore */ }
+
+      // One-time migration from v1 (single category) to v2 (tags array)
+      try {
+        const v1 = JSON.parse(localStorage.getItem(STORAGE_KEY_OLD));
+        if (v1) {
+          const migrated = {};
+          Object.keys(v1).forEach(url => {
+            const old = v1[url] || {};
+            migrated[url] = {
+              tags: old.category ? [old.category] : [],
+              starred: !!old.starred,
+              archived: !!old.archived
+            };
+          });
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+          return migrated;
+        }
+      } catch (e) { /* ignore */ }
+
+      return {};
+    }
+    function saveTriage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(triage));
+    }
+    function getTriage(url) {
+      const t = triage[url] || {};
+      return {
+        tags: Array.isArray(t.tags) ? t.tags : [],
+        starred: !!t.starred,
+        archived: !!t.archived,
+        brief: t.brief || "",
+        kicker: t.kicker || "",
+        // Stored post metadata — makes each record self-contained & searchable,
+        // and lets Picks / Front Page render without the live feed.
+        title: t.title || "",
+        author: t.author || "",
+        sourceName: t.sourceName || "",
+        image: t.image || "",
+        date: t.date || "",
+        excerpt: t.excerpt || "",
+        group: t.group || ""
+      };
+    }
+    function setTriage(url, patch) {
+      const cur = getTriage(url);
+      triage[url] = Object.assign({}, cur, patch);
+      saveTriage();
+    }
+    // Capture a feed item's display metadata into its triage record, so the
+    // post can be rendered later even after it leaves the 14-day feed window.
+    // Called whenever we touch an item (star/tag/brief) and whenever feeds load.
+    // Only fills fields that are currently empty so we never clobber good data
+    // with a blank from a partial feed.
+    function captureItemMeta(item) {
+      if (!item || !item.link) return;
+      const cur = triage[item.link] || {};
+      const patch = {};
+      if (!cur.title && item.title) patch.title = item.title;
+      if (!cur.author && item.author) patch.author = item.author;
+      if (!cur.sourceName && item.sourceName) patch.sourceName = item.sourceName;
+      if ((cur.image === undefined || cur.image === "") && item.image) patch.image = item.image;
+      if (!cur.date && item.date) patch.date = item.date instanceof Date ? item.date.toISOString() : item.date;
+      if (!cur.excerpt && item.excerpt) patch.excerpt = item.excerpt;
+      if (!cur.group && item.group) patch.group = item.group;
+      if (Object.keys(patch).length) {
+        triage[item.link] = Object.assign({}, cur, patch);
+        saveTriage();
+      }
+    }
+    function addTag(url, tag) {
+      const t = (tag || "").trim();
+      if (!t) return;
+      const cur = getTriage(url);
+      if (cur.tags.includes(t)) return;
+      setTriage(url, { tags: cur.tags.concat([t]) });
+    }
+    function removeTag(url, tag) {
+      const cur = getTriage(url);
+      setTriage(url, { tags: cur.tags.filter(x => x !== tag) });
+    }
+
+    // Build tag frequency map. scope: "all" (default, every triaged item)
+    // or "active" (excludes archived items). Returns Map: tag -> { total, starred }
+    function getTagFrequencies(scope) {
+      scope = scope || "all";
+      const freq = new Map();
+      Object.keys(triage).forEach(url => {
+        const t = triage[url];
+        if (scope === "active" && t.archived) return;
+        const tags = Array.isArray(t.tags) ? t.tags : [];
+        const isStarred = !!t.starred;
+        tags.forEach(tag => {
+          const cur = freq.get(tag) || { total: 0, starred: 0 };
+          cur.total += 1;
+          if (isStarred) cur.starred += 1;
+          freq.set(tag, cur);
+        });
+      });
+      return freq;
+    }
+
+    /* ============================================================
+       FEED FETCHING
+       ============================================================ */
+    async function fetchFeed(feed, group) {
+      // Try each proxy in order. First success wins. If all fail,
+      // return the most informative error we got along the way.
+      let attempts = [];
+      for (let i = 0; i < PROXIES.length; i++) {
+        const proxy = PROXIES[i];
+        let result;
+        try {
+          const url = proxy.build(feed.url);
+          const res = await fetch(url);
+          if (!res.ok) {
+            attempts.push({ proxy: proxy.name, error: "HTTP " + res.status });
+            continue;
+          }
+          const xml = await res.text();
+          try {
+            const items = parseFeed(xml, feed, group);
+            return { ok: true, items, viaProxy: proxy.name };
+          } catch (parseErr) {
+            // Capture a short snippet of the body so we can tell HTML-error-page
+            // from genuine-bad-XML at a glance.
+            const snippet = (xml || "").trim().slice(0, 200).replace(/\s+/g, " ");
+            attempts.push({
+              proxy: proxy.name,
+              error: parseErr.message || "Parse error",
+              snippet
+            });
+            continue;
+          }
+        } catch (netErr) {
+          attempts.push({ proxy: proxy.name, error: "Network: " + (netErr.message || "fetch failed") });
+          continue;
+        }
+      }
+      // All proxies exhausted. Pick the most useful attempt for the error message.
+      const best = pickBestAttempt(attempts);
+      return {
+        ok: false,
+        error: best.error,
+        snippet: best.snippet || "",
+        feedName: feed.name,
+        feedUrl: feed.url,
+        attempts
+      };
+    }
+
+    // Prefer parse errors with a snippet (most actionable), then HTTP errors,
+    // then network errors. This is what we surface in the UI.
+    function pickBestAttempt(attempts) {
+      if (!attempts.length) return { error: "No proxies configured" };
+      const withSnippet = attempts.find(a => a.snippet);
+      if (withSnippet) return withSnippet;
+      const httpErr = attempts.find(a => /^HTTP /.test(a.error));
+      if (httpErr) return httpErr;
+      return attempts[attempts.length - 1];
+    }
+
+    function parseFeed(xmlText, feed, group) {
+      if (!xmlText || !xmlText.trim()) {
+        throw new Error("Empty response");
+      }
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xmlText, "text/xml");
+      const parserError = doc.querySelector("parsererror");
+      if (parserError) {
+        // Distinguish "looks like HTML" from genuinely garbled XML
+        const trimmed = xmlText.trim();
+        if (/^<(!doctype|html|head|body)\b/i.test(trimmed) || trimmed.startsWith("<!DOCTYPE")) {
+          throw new Error("Got HTML, not RSS (URL likely wrong or behind login)");
+        }
+        throw new Error("Invalid XML");
+      }
+
+      // RSS 2.0 (<rss><channel><item>) or Atom (<feed><entry>)
+      const isAtom = doc.documentElement.tagName.toLowerCase() === "feed";
+      const itemNodes = isAtom
+        ? Array.from(doc.querySelectorAll("entry"))
+        : Array.from(doc.querySelectorAll("item"));
+
+      return itemNodes.map(node => parseItem(node, feed, group, isAtom)).filter(Boolean);
+    }
+
+    function parseItem(node, feed, group, isAtom) {
+      const get = sel => {
+        const el = node.querySelector(sel);
+        return el ? el.textContent.trim() : "";
+      };
+      const title = get("title");
+      let link = "";
+      if (isAtom) {
+        const linkEl = Array.from(node.querySelectorAll("link"))
+          .find(l => !l.getAttribute("rel") || l.getAttribute("rel") === "alternate");
+        link = linkEl ? linkEl.getAttribute("href") : "";
+      } else {
+        link = get("link");
+      }
+      const dateStr = get("pubDate") || get("published") || get("updated") || get("dc\\:date");
+      const date = dateStr ? new Date(dateStr) : null;
+
+      // Author: try dc:creator, author, then fall back to feed author.
+      let author = get("dc\\:creator") || feed.author;
+      const authorEl = node.querySelector("author");
+      if (authorEl && !author) {
+        const nameEl = authorEl.querySelector("name");
+        author = nameEl ? nameEl.textContent.trim() : authorEl.textContent.trim();
+      }
+
+      // Excerpt: description or summary or content. Strip HTML.
+      const rawDesc = get("description") || get("summary") || get("content\\:encoded") || get("content");
+      const excerpt = stripHtml(rawDesc).slice(0, 320);
+
+      // Image: try enclosure, media:content, media:thumbnail, then first <img> in description.
+      let image = "";
+      const enclosure = node.querySelector("enclosure[type^='image']");
+      if (enclosure) image = enclosure.getAttribute("url") || "";
+      if (!image) {
+        const media = node.querySelector("media\\:content, media\\:thumbnail");
+        if (media) image = media.getAttribute("url") || "";
+      }
+      if (!image && rawDesc) {
+        const m = rawDesc.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (m) image = m[1];
+      }
+
+      if (!title || !link) return null;
+
+      return {
+        title,
+        link,
+        date,
+        excerpt,
+        image,
+        author,
+        sourceName: feed.name,
+        group
+      };
+    }
+
+    function stripHtml(s) {
+      if (!s) return "";
+      const div = document.createElement("div");
+      div.innerHTML = s;
+      return (div.textContent || div.innerText || "").trim().replace(/\s+/g, " ");
+    }
+
+    async function loadAllFeeds(forceRefresh = false) {
+      // Cache check
+      if (!forceRefresh) {
+        const cached = loadCache();
+        if (cached) {
+          allItems = cached.items.map(i => ({ ...i, date: i.date ? new Date(i.date) : null }));
+          allItems.forEach(captureItemMeta);
+          updateLastFetch(new Date(cached.fetchedAt));
+          render();
+          return;
+        }
+      }
+
+      setStatus("Loading feeds…");
+      const refreshBtn = document.getElementById("refresh-btn");
+      refreshBtn.disabled = true;
+      refreshBtn.textContent = "↻ Loading…";
+
+      feedErrors = [];
+      const tasks = [
+        ...SCIENTIST_FEEDS.map(f => fetchFeed(f, "scientists")),
+        ...WRITER_FEEDS.map(f => fetchFeed(f, "writers"))
+      ];
+      const results = await Promise.all(tasks);
+
+      let items = [];
+      results.forEach(r => {
+        if (r.ok) items = items.concat(r.items);
+        else feedErrors.push({
+          name: r.feedName,
+          url: r.feedUrl,
+          error: r.error,
+          snippet: r.snippet || "",
+          attempts: r.attempts || []
+        });
+      });
+
+      // Filter to time window, sort by date desc
+      const cutoff = Date.now() - TIME_WINDOW_DAYS * 24 * 60 * 60 * 1000;
+      items = items.filter(it => it.date && it.date.getTime() >= cutoff);
+      items.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+
+      allItems = items;
+      // Backfill stored metadata for any triaged post that appears in the feed.
+      items.forEach(captureItemMeta);
+      saveCache(items);
+      updateLastFetch(new Date());
+
+      refreshBtn.disabled = false;
+      refreshBtn.textContent = "↻ Refresh feeds";
+
+      render();
+    }
+
+    function loadCache() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(FEED_CACHE_KEY));
+        if (!raw) return null;
+        if (Date.now() - raw.fetchedAt > FEED_CACHE_TTL_MS) return null;
+        return raw;
+      } catch (e) { return null; }
+    }
+    function saveCache(items) {
+      try {
+        localStorage.setItem(FEED_CACHE_KEY, JSON.stringify({
+          fetchedAt: Date.now(),
+          items
+        }));
+      } catch (e) { /* localStorage full or disabled, fail silently */ }
+    }
+
+    function setStatus(msg, isError = false) {
+      const el = document.getElementById("feed-status");
+      el.textContent = msg;
+      el.classList.toggle("error", isError);
+      el.classList.toggle("hidden", !msg);
+    }
+
+    function updateLastFetch(d) {
+      const el = document.getElementById("last-fetch");
+      if (!d) { el.textContent = ""; return; }
+      const s = d.toLocaleString(undefined, {
+        month: "short", day: "numeric",
+        hour: "numeric", minute: "2-digit"
+      });
+      el.textContent = "Last refresh: " + s;
+    }
+
+    /* ============================================================
+       RENDERING
+       ============================================================ */
+    function render() {
+      // Counts
+      const sciCount = allItems.filter(i => i.group === "scientists" && !getTriage(i.link).archived).length;
+      const wriCount = allItems.filter(i => i.group === "writers" && !getTriage(i.link).archived).length;
+      const allCount = sciCount + wriCount;
+      const picksCount = Object.values(triage).filter(t => t.starred).length;
+
+      document.getElementById("count-scientists").textContent = `· ${sciCount}`;
+      document.getElementById("count-writers").textContent = `· ${wriCount}`;
+      document.getElementById("count-all").textContent = `· ${allCount}`;
+      document.getElementById("count-picks").textContent = `· ${picksCount}`;
+
+      // Feed errors banner
+      const errEl = document.getElementById("feed-errors");
+      if (feedErrors.length) {
+        errEl.classList.remove("hidden");
+        errEl.innerHTML = `
+      <div class="err-head">Some feeds did not load (${feedErrors.length})</div>
+      <ul>
+        ${feedErrors.map(e => {
+          const attemptsList = (e.attempts || []).map(a =>
+            `<li>${escapeHtml(a.proxy)} → ${escapeHtml(a.error)}</li>`
+          ).join("");
+          const snippetBlock = e.snippet
+            ? `<div class="err-snippet"><b>Response sample:</b> ${escapeHtml(e.snippet)}…</div>`
+            : "";
+          const detail = (attemptsList || snippetBlock)
+            ? `<details>
+                 <summary>Show diagnostic detail</summary>
+                 <div class="err-detail">
+                   ${attemptsList ? `<b>Tried:</b><ul style="margin-top: 0.2rem;">${attemptsList}</ul>` : ""}
+                   ${snippetBlock}
+                   ${e.url ? `<div class="err-url" style="margin-top: 0.4rem;"><b>URL:</b> ${escapeHtml(e.url)}</div>` : ""}
+                 </div>
+               </details>`
+            : "";
+          return `
+            <li>
+              <span class="err-name">${escapeHtml(e.name)}</span> —
+              <span class="err-msg">${escapeHtml(e.error)}</span>
+              ${detail}
+            </li>`;
+        }).join("")}
+      </ul>`;
+      } else {
+        errEl.classList.add("hidden");
+      }
+
+      // Filter bar — render active tag filters
+      renderFilterBar();
+
+      // View routing
+      const showFeed = ["scientists", "writers", "all"].includes(activeTab);
+      document.getElementById("view-feed").classList.toggle("hidden", !showFeed);
+      document.getElementById("view-picks").classList.toggle("hidden", activeTab !== "picks");
+      document.getElementById("view-frontpage").classList.toggle("hidden", activeTab !== "frontpage");
+      document.getElementById("view-settings").classList.toggle("hidden", activeTab !== "settings");
+      document.getElementById("filter-bar").classList.toggle("hidden", activeTab === "settings" || activeTab === "picks" || activeTab === "frontpage");
+
+      if (showFeed) renderFeedView();
+      else if (activeTab === "picks") renderPicksView();
+      else if (activeTab === "frontpage") renderFrontPageView();
+      else if (activeTab === "settings") renderSettingsView();
+
+      setStatus(""); // hide if anything else is going to render
+    }
+
+    function renderFilterBar() {
+      const el = document.getElementById("filter-tags");
+      if (!activeTagFilters.length) {
+        el.innerHTML = `<span style="color: var(--ink-faint); font-style: italic; font-size: 0.74rem;">none — click any tag chip on an item to filter</span>`;
+        return;
+      }
+      el.innerHTML = activeTagFilters.map(t => `
+    <span class="filter-tag-chip" data-tag="${escapeHtml(t)}">
+      ${escapeHtml(t)} <span class="x">×</span>
+    </span>`).join("");
+      el.querySelectorAll(".filter-tag-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          activeTagFilters = activeTagFilters.filter(t => t !== chip.dataset.tag);
+          render();
+        });
+      });
+    }
+
+    // Cloud panel that appears below the filter bar on Scientists/Writers/All tabs.
+    // Shows all tags ever used (or active-only, toggleable), and counts.
+    // Click a tag to add/remove it from the active filter.
+    function renderCloudPanel() {
+      const mount = document.getElementById("cloud-panel-mount");
+      const freq = getTagFrequencies(cloudScope);
+      const sortedTags = Array.from(freq.entries())
+        .sort((a, b) => b[1].total - a[1].total || a[0].localeCompare(b[0]));
+
+      if (!sortedTags.length) {
+        mount.innerHTML = `<div class="cloud-panel ${cloudCollapsed ? 'collapsed' : ''}">
+      <button class="cloud-panel-toggle" id="cloud-toggle">
+        <span>Tags <span class="summary">no tags yet — start tagging items below</span></span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="cloud-panel-body">
+        <div style="color: var(--ink-faint); font-style: italic; font-size: 0.85rem;">No tags yet. Add tags to items below and they'll appear here.</div>
+      </div>
+    </div>`;
+        attachCloudToggle();
+        return;
+      }
+
+      // Sizing — same scheme as Picks cloud, slightly smaller range
+      const maxFreq = sortedTags[0][1].total;
+      const minFreq = sortedTags[sortedTags.length - 1][1].total;
+      const sizeFor = f => {
+        if (maxFreq === minFreq) return 0.82;
+        const ratio = (f - minFreq) / (maxFreq - minFreq);
+        return (0.74 + ratio * 0.45).toFixed(2); // 0.74rem to 1.19rem
+      };
+
+      const cloudHtml = sortedTags.map(([tag, f]) => {
+        const active = activeTagFilters.includes(tag);
+        return `<span class="cloud-tag ${active ? 'active' : ''}" data-tag="${escapeHtml(tag)}" style="font-size: ${sizeFor(f.total)}rem;">
+      ${escapeHtml(tag)}<span class="freq">${f.total}</span>
+    </span>`;
+      }).join("");
+
+      // Summary line for collapsed state
+      const top3 = sortedTags.slice(0, 3).map(([tag, f]) => `${tag} (${f.total})`).join(" · ");
+      const summary = `${sortedTags.length} tag${sortedTags.length === 1 ? '' : 's'} · top: ${top3}`;
+
+      // Filter clear button
+      const clearBtn = activeTagFilters.length
+        ? `<button class="cloud-clear" id="cloud-clear">Clear ${activeTagFilters.length} filter${activeTagFilters.length > 1 ? 's' : ''}</button>`
+        : `<span></span>`;
+
+      mount.innerHTML = `
+    <div class="cloud-panel ${cloudCollapsed ? 'collapsed' : ''}">
+      <button class="cloud-panel-toggle" id="cloud-toggle">
+        <span>Tags <span class="summary">${escapeHtml(summary)}</span></span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="cloud-panel-body">
+        <div class="cloud-panel-controls">
+          <div class="cloud-toggle-group" role="tablist">
+            <button class="${cloudScope === 'active' ? 'active' : ''}" data-scope="active" title="Tags from non-archived items only">Active</button>
+            <button class="${cloudScope === 'all' ? 'active' : ''}" data-scope="all" title="Tags from all items including archived">All including archived</button>
+          </div>
+          ${clearBtn}
+        </div>
+        <div class="tag-cloud">${cloudHtml}</div>
+      </div>
+    </div>`;
+
+      attachCloudToggle();
+
+      // Cloud tag click toggles filter
+      mount.querySelectorAll(".cloud-tag").forEach(el => {
+        el.addEventListener("click", () => {
+          const tag = el.dataset.tag;
+          if (activeTagFilters.includes(tag)) {
+            activeTagFilters = activeTagFilters.filter(t => t !== tag);
+          } else {
+            activeTagFilters = activeTagFilters.concat([tag]);
+          }
+          render();
+        });
+      });
+
+      // Scope toggle
+      mount.querySelectorAll(".cloud-toggle-group button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          cloudScope = btn.dataset.scope;
+          localStorage.setItem("sai-reader-cloud-scope", cloudScope);
+          render();
+        });
+      });
+
+      // Clear filter
+      const cb = document.getElementById("cloud-clear");
+      if (cb) {
+        cb.addEventListener("click", () => {
+          activeTagFilters = [];
+          render();
+        });
+      }
+    }
+
+    function attachCloudToggle() {
+      const btn = document.getElementById("cloud-toggle");
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        cloudCollapsed = !cloudCollapsed;
+        localStorage.setItem("sai-reader-cloud-collapsed", cloudCollapsed ? "1" : "0");
+        const panel = btn.closest(".cloud-panel");
+        if (panel) panel.classList.toggle("collapsed", cloudCollapsed);
+      });
+    }
+
+    function renderFeedView() {
+      renderCloudPanel();
+
+      let items = allItems.filter(it => {
+        if (activeTab === "scientists" && it.group !== "scientists") return false;
+        if (activeTab === "writers" && it.group !== "writers") return false;
+        const t = getTriage(it.link);
+        if (!showArchived && t.archived) return false;
+        // AND-filter: every active filter tag must be present on this item
+        if (activeTagFilters.length) {
+          for (const ft of activeTagFilters) {
+            if (!t.tags.includes(ft)) return false;
+          }
+        }
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          const inText =
+            it.title.toLowerCase().includes(q) ||
+            (it.author || "").toLowerCase().includes(q) ||
+            (it.excerpt || "").toLowerCase().includes(q);
+          const inTags = t.tags.some(tg => tg.toLowerCase().includes(q));
+          if (!inText && !inTags) return false;
+        }
+        return true;
+      });
+
+      const grid = document.getElementById("item-grid");
+      if (!items.length) {
+        grid.innerHTML = `<div class="empty">No items in this view.</div>`;
+        return;
+      }
+      grid.innerHTML = items.map(itemCard).join("");
+      attachItemHandlers();
+    }
+
+    function renderPicksView() {
+      const view = document.getElementById("view-picks");
+      const starred = allStarredResolved();
+
+      if (!starred.length) {
+        view.innerHTML = `<div class="empty">No starred items yet. Triage from the Scientists or Writers tabs to build your weekly picks.</div>`;
+        return;
+      }
+
+      // Build frequency map from starred items only.
+      // Also collect untagged starred items.
+      const tagFreq = new Map();
+      let untaggedCount = 0;
+      starred.forEach(it => {
+        const t = getTriage(it.link);
+        if (!t.tags.length) untaggedCount++;
+        t.tags.forEach(tag => {
+          tagFreq.set(tag, (tagFreq.get(tag) || 0) + 1);
+        });
+      });
+
+      // Sort tags by frequency desc, then alpha
+      const sortedTags = Array.from(tagFreq.entries())
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+      // Apply active tag filters (AND); search also applies in picks
+      let visibleItems = starred.filter(it => {
+        const t = getTriage(it.link);
+        if (activeTagFilters.length) {
+          for (const ft of activeTagFilters) {
+            if (!t.tags.includes(ft)) return false;
+          }
+        }
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          const inText =
+            it.title.toLowerCase().includes(q) ||
+            (it.author || "").toLowerCase().includes(q) ||
+            (it.excerpt || "").toLowerCase().includes(q);
+          const inTags = t.tags.some(tg => tg.toLowerCase().includes(q));
+          if (!inText && !inTags) return false;
+        }
+        return true;
+      });
+
+      // Tag cloud sizing: linear interpolation between min and max font sizes
+      const maxFreq = sortedTags.length ? sortedTags[0][1] : 1;
+      const minFreq = sortedTags.length ? sortedTags[sortedTags.length - 1][1] : 1;
+      const sizeFor = freq => {
+        if (maxFreq === minFreq) return 0.85;
+        const ratio = (freq - minFreq) / (maxFreq - minFreq);
+        return (0.78 + ratio * 0.55).toFixed(2); // 0.78rem to 1.33rem
+      };
+
+      // Header / clear button
+      const filterActive = activeTagFilters.length > 0;
+      const headRight = filterActive
+        ? `<button class="clear-filter" id="clear-pick-filters">Clear filter (${activeTagFilters.length})</button>`
+        : "";
+
+      let cloudHtml = sortedTags.map(([tag, freq]) => {
+        const active = activeTagFilters.includes(tag);
+        return `<span class="cloud-tag ${active ? 'active' : ''}" data-tag="${escapeHtml(tag)}" style="font-size: ${sizeFor(freq)}rem;">
+      ${escapeHtml(tag)}<span class="freq">${freq}</span>
+    </span>`;
+      }).join("");
+      if (!cloudHtml) {
+        cloudHtml = `<span style="color: var(--ink-faint); font-style: italic;">No tags yet on starred items.</span>`;
+      }
+
+      // Sort: items with more matched tags first (when filtering), else by date desc
+      visibleItems.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+
+      const meta = filterActive
+        ? `${visibleItems.length} of ${starred.length} starred · filtered by ${activeTagFilters.length} tag${activeTagFilters.length > 1 ? 's' : ''}`
+        : `${starred.length} starred`;
+
+      let untaggedNote = "";
+      if (untaggedCount && !filterActive) {
+        untaggedNote = `<div style="font-family: var(--mono); font-size: 0.72rem; color: var(--amber); margin-top: 0.6rem;">
+      ${untaggedCount} starred item${untaggedCount > 1 ? 's have' : ' has'} no tags yet.
+    </div>`;
+      }
+
+      view.innerHTML = `
+    <div class="tag-cloud-wrap">
+      <div class="tag-cloud-head">
+        <span>Tags on starred items</span>
+        ${headRight}
+      </div>
+      <div class="tag-cloud">${cloudHtml}</div>
+      ${untaggedNote}
+    </div>
+    <div class="picks-list-head">
+      ★ Picks <span class="meta">${meta}</span>
+    </div>
+    <div class="item-grid">
+      ${visibleItems.length ? visibleItems.map(itemCard).join("") : '<div class="empty">No starred items match the active filter.</div>'}
+    </div>`;
+
+      // Cloud tag click toggles filter
+      view.querySelectorAll(".cloud-tag").forEach(el => {
+        el.addEventListener("click", () => {
+          const tag = el.dataset.tag;
+          if (activeTagFilters.includes(tag)) {
+            activeTagFilters = activeTagFilters.filter(t => t !== tag);
+          } else {
+            activeTagFilters = activeTagFilters.concat([tag]);
+          }
+          render();
+        });
+      });
+      const clearBtn = document.getElementById("clear-pick-filters");
+      if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+          activeTagFilters = [];
+          render();
+        });
+      }
+
+      attachItemHandlers();
+    }
+
+    /* ============================================================
+       FRONT PAGE BUILDER
+       ============================================================ */
+    // Look up the item object for a given URL, from allItems.
+    // Returns null if not found (e.g. item rotated out of the time window).
+    function findItemByUrl(url) {
+      if (!url) return null;
+      return allItems.find(it => it.link === url) || null;
+    }
+
+    // All starred items, sorted by date desc (newest first).
+    function starredItemsByDate() {
+      return allItems
+        .filter(it => getTriage(it.link).starred)
+        .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+    }
+
+    // Resolve a post for display from EITHER the live feed (freshest) OR the
+    // metadata stored on its triage record. This is the core of the fix: Picks,
+    // the Front Page builder, and the recent list all use this, so nothing
+    // depends on the post still being in the 14-day feed window.
+    function resolveItem(url) {
+      if (!url) return null;
+      const live = findItemByUrl(url);
+      if (live) return live;
+      const t = triage[url];
+      if (t && t.title) {
+        return {
+          link: url,
+          title: t.title,
+          author: t.author || "",
+          sourceName: t.sourceName || "",
+          date: t.date ? new Date(t.date) : null,
+          image: t.image || "",
+          excerpt: t.excerpt || "",
+          group: t.group || "",
+          _fromArchive: true   // marker: rendered from stored metadata, not live feed
+        };
+      }
+      return null;
+    }
+
+    // All starred posts, resolved from feed-or-archive, newest first.
+    // Replaces the old starredItemsByDate() which only saw the live feed.
+    function allStarredResolved() {
+      return Object.keys(triage)
+        .filter(url => triage[url] && triage[url].starred)
+        .map(resolveItem)
+        .filter(Boolean)
+        .sort((a, b) => (b.date ? b.date.getTime() : 0) - (a.date ? a.date.getTime() : 0));
+    }
+    
+    // Compute which posts auto-fill the "Recent Posts" sidebar.
+    // We exclude anything already in Hero or Selected so the same post doesn't
+    // appear twice on the front page.
+    function recentSidebarItems() {
+      const exclude = new Set([frontpage.heroUrl, ...frontpage.selectedUrls].filter(Boolean));
+      return starredItemsByDate()
+        .filter(it => !exclude.has(it.link))
+        .slice(0, frontpage.recentCount || 6);
+    }
+
+    function renderFrontPageView() {
+      const view = document.getElementById("view-frontpage");
+      const starred = allStarredResolved();
+      const heroItem = resolveItem(frontpage.heroUrl);
+      const selectedItems = (frontpage.selectedUrls || []).map(resolveItem);
+
+      // Validate: are any slot URLs pointing to items that no longer exist?
+      // (e.g. they aged out of the 14-day window). Surface that.
+      const heroMissing = !!frontpage.heroUrl && !heroItem;
+      const selMissing = (frontpage.selectedUrls || []).filter(u => u && !resolveItem(u));      // No starred items at all? Show a helpful empty state.
+      if (!starred.length) {
+        view.innerHTML = `
+      <div class="fp-wrap">
+        <div class="empty">
+          To build a front page, first star at least one item from the Scientists or Writers tabs.
+          Add an Editorial Brief to each starred item — those bullets become the deck on the front page
+          and the text of each post in the social-media thread.
+        </div>
+      </div>`;
+        return;
+      }
+
+      view.innerHTML = `
+    <div class="fp-wrap">
+      <p class="fp-intro">
+        The front page is always current. Pick a Hero (1) and Selected (3) from your starred items.
+        The Recent Posts sidebar fills automatically with the ${frontpage.recentCount} most recent stars
+        not already in those slots. Editorial Briefs you've written appear on the front page as the deck;
+        if a slot has no brief, the RSS excerpt is used as a fallback.
+      </p>
+
+      ${(heroMissing || selMissing.length) ? `
+        <div class="feed-error-list" style="margin-bottom: 1.2rem;">
+          <div class="err-head">Some slot assignments need attention</div>
+          <ul>
+            ${heroMissing ? `<li><span class="err-name">Hero</span> — assigned post is no longer in the feed window. Pick another.</li>` : ""}
+            ${selMissing.length ? `<li><span class="err-name">Selected</span> — ${selMissing.length} assigned post${selMissing.length > 1 ? 's are' : ' is'} no longer in the feed window. Pick replacement${selMissing.length > 1 ? 's' : ''}.</li>` : ""}
+          </ul>
+        </div>` : ""}
+
+      <div class="fp-section">
+        <h2>Tagline <em>(optional)</em></h2>
+        <p class="help">Replaces the "Week in Review" banner on the front page. A short editorial line — what's the through-line of what you're promoting right now?</p>
+        <input type="text" id="fp-tagline" class="fp-tagline-input" maxlength="240"
+               placeholder="e.g. This week: lead poisoning, AI bioweapon risk, and the gold-standard double standard."
+               value="${escapeHtml(frontpage.tagline || "")}">
+      </div>
+
+      <div class="fp-section">
+        <h2>Hero <em>(1 post)</em></h2>
+        <p class="help">The lead post on the front page. Gets the largest treatment with image, title, deck, and standfirst.</p>
+        <div class="fp-hero-area">
+          ${renderSlot("hero", heroItem)}
+          <div style="font-family: var(--sans); font-size: 0.78rem; color: var(--ink-faint); padding: 1rem; line-height: 1.5;">
+            <div style="font-weight: 600; color: var(--ink); margin-bottom: 0.4rem; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.7rem;">Tip</div>
+            The hero is your strongest piece of the moment. Pick something with a strong image and an Editorial Brief written.
+          </div>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <h2>Selected Posts <em>(up to 6)</em></h2>
+        <p class="help">Six posts shown below the featured item. Newest promotion goes to the top; the rest shift down. A post pushed past six leaves the front page but stays starred in Picks.</p>
+        <div class="fp-selected-area">
+          ${[0, 1, 2, 3, 4, 5].map(i => renderSlot({ type: "selected", idx: i }, selectedItems[i])).join("")}
+        </div>
+      </div>
+
+
+
+      <div class="fp-export-bar">
+        <div class="fp-export-status" id="fp-export-status">${exportStatusText(heroItem, selectedItems)}</div>
+        <div class="fp-export-actions">
+          <button class="fp-export-btn secondary" id="fp-clear-btn">Clear all slots</button>
+          <button class="fp-export-btn primary" id="fp-export-btn">Download state.json</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+      attachFrontPageHandlers();
+
+      // If a picker is open, render it on top
+      if (fpPickerOpen) renderPicker();
+    }
+
+    function exportStatusText(heroItem, selectedItems) {
+      const filled = (heroItem ? 1 : 0) + selectedItems.filter(Boolean).length;
+      const total = 1 + 3;
+      if (filled === total) return `Ready · ${total}/${total} slots filled`;
+      return `${filled}/${total} slots filled — you can still export, missing slots will be omitted`;
+    }
+
+    function renderSlot(slot, item) {
+      const slotKey = typeof slot === "string" ? slot : `${slot.type}-${slot.idx}`;
+      const slotLabel = slot === "hero" ? "Hero" : `Selected ${slot.idx + 1}`;
+      const slotClass = slot === "hero" ? "hero" : "selected";
+
+      if (!item) {
+        return `
+      <div class="fp-slot ${slotClass}" data-slot-key="${slotKey}">
+        <div class="fp-slot-label">${slotLabel}</div>
+        <div class="fp-slot-empty">
+          <div>
+            <div style="margin-bottom: 0.6rem;">No post assigned</div>
+            <button data-action="pick" data-slot-key="${slotKey}">Pick a post</button>
+          </div>
+        </div>
+      </div>`;
+      }
+
+      const t = getTriage(item.link);
+      const dateStr = item.date ? item.date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) : "";
+      const thumb = item.image
+        ? `<img class="fp-slot-thumb" src="${escapeHtml(item.image)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=\\'fp-slot-noimg\\'>NO IMAGE</div>'">`
+        : `<div class="fp-slot-noimg">NO IMAGE</div>`;
+
+      // Default kicker = first tag if any. User can override per-slot, but we
+      // store kicker on the post (in triage) so it's reusable.
+      const defaultKicker = (t.tags[0] || "").toUpperCase();
+      const kickerValue = t.kicker || defaultKicker;
+
+      return `
+    <div class="fp-slot ${slotClass} filled" data-slot-key="${slotKey}">
+      <div class="fp-slot-label">${slotLabel}</div>
+      <div class="fp-slot-content">
+        ${thumb}
+        <div class="fp-slot-kicker-row">
+          <input type="text" class="fp-slot-kicker" data-action="kicker" data-link="${escapeHtml(item.link)}"
+                 placeholder="Kicker (e.g. ENVIRONMENTAL HEALTH)"
+                 value="${escapeHtml(kickerValue)}">
+        </div>
+        <div class="fp-slot-title"><a href="${escapeHtml(item.link)}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a></div>
+        <div class="fp-slot-meta">
+          <span class="author">${escapeHtml(item.author || "")}</span>
+          · <i>${escapeHtml(item.sourceName)}</i>
+          · ${dateStr}
+        </div>
+        <div class="fp-slot-brief-label">Editorial Brief</div>
+        <textarea class="fp-slot-brief" data-action="brief" data-link="${escapeHtml(item.link)}"
+                  placeholder="• A short bullet summarizing the post&#10;• Why it matters">${escapeHtml(t.brief || "")}</textarea>
+        <div class="fp-slot-actions">
+          <button class="fp-slot-action" data-action="pick" data-slot-key="${slotKey}">Replace</button>
+          <button class="fp-slot-action danger" data-action="clear-slot" data-slot-key="${slotKey}">Remove</button>
+        </div>
+      </div>
+    </div>`;
+    }
+
+    function attachFrontPageHandlers() {
+      // Tagline
+      const tagEl = document.getElementById("fp-tagline");
+      if (tagEl) {
+        tagEl.addEventListener("input", () => {
+          frontpage.tagline = tagEl.value;
+          saveFrontPage();
+          // No re-render — would lose focus
+        });
+      }
+
+      // Pick / Replace buttons → open picker
+      document.querySelectorAll('[data-action="pick"]').forEach(btn => {
+        btn.addEventListener("click", () => {
+          fpPickerOpen = { slotKey: btn.dataset.slotKey };
+          renderPicker();
+        });
+      });
+
+      // Remove → clear slot
+      document.querySelectorAll('[data-action="clear-slot"]').forEach(btn => {
+        btn.addEventListener("click", () => {
+          assignSlot(btn.dataset.slotKey, null);
+          render();
+        });
+      });
+
+      // Kicker per-slot — saves on each post (triage.kicker)
+      document.querySelectorAll('.fp-slot-kicker[data-action="kicker"]').forEach(el => {
+        el.addEventListener("input", () => {
+          setTriage(el.dataset.link, { kicker: el.value });
+          // No re-render — keep focus
+        });
+      });
+
+      // Brief per-slot — same field as on item cards, saves on triage.brief
+      document.querySelectorAll('.fp-slot-brief[data-action="brief"]').forEach(el => {
+        el.addEventListener("input", () => {
+          setTriage(el.dataset.link, { brief: el.value });
+          // No re-render — keep focus
+        });
+      });
+
+      // Clear all slots
+      const clearBtn = document.getElementById("fp-clear-btn");
+      if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+          if (!confirm("Clear all slot assignments? Your tagline and per-post briefs are preserved.")) return;
+          frontpage.heroUrl = "";
+          frontpage.selectedUrls = [];
+          saveFrontPage();
+          render();
+        });
+      }
+
+      // Export
+      const exportBtn = document.getElementById("fp-export-btn");
+      if (exportBtn) {
+        exportBtn.addEventListener("click", exportFrontPageJson);
+      }
+    }
+
+    // Pure helper: write a slot key ("hero" or "selected-{0,1,2}") with a URL or null.
+    function assignSlot(slotKey, url) {
+      if (slotKey === "hero") {
+        frontpage.heroUrl = url || "";
+      } else if (slotKey.startsWith("selected-")) {
+        const idx = parseInt(slotKey.split("-")[1], 10);
+        const list = frontpage.selectedUrls.slice();
+        while (list.length < 3) list.push("");
+        list[idx] = url || "";
+        // Compact trailing empties — but keep positional index integrity. Just store as-is.
+        frontpage.selectedUrls = list;
+      }
+      saveFrontPage();
+    }
+
+    // Promote a post to the top of Selected. Newest-promoted goes to index 0,
+    // everything shifts down, list is capped at 6. A post pushed past 6 falls off
+    // the front page but remains starred (still in Picks). De-dupes so a post
+    // can't appear twice, and never duplicates the Featured post.
+    function promoteToSelected(url) {
+      if (!url) return;
+      let list = (frontpage.selectedUrls || []).filter(u => u && u !== url);
+      list.unshift(url);
+      if (frontpage.heroUrl === url) frontpage.heroUrl = ""; // can't be both
+      frontpage.selectedUrls = list.slice(0, 6);
+      saveFrontPage();
+    }
+
+    // Pin a post as the Featured (hero). If it was in Selected, remove it there
+    // so the seven slots stay distinct.
+    function setFeatured(url) {
+      frontpage.heroUrl = url || "";
+      if (url) frontpage.selectedUrls = (frontpage.selectedUrls || []).filter(u => u !== url);
+      saveFrontPage();
+    }
+
+    function removeFromSelected(url) {
+      frontpage.selectedUrls = (frontpage.selectedUrls || []).filter(u => u !== url);
+      saveFrontPage();
+    }
+
+    function renderPicker() {
+      // Remove any existing picker first
+      const existing = document.getElementById("fp-modal-backdrop");
+      if (existing) existing.remove();
+
+      if (!fpPickerOpen) return;
+
+      const starred = starredItemsByDate();
+      const slotKey = fpPickerOpen.slotKey;
+      const slotLabel = slotKey === "hero"
+        ? "Hero"
+        : `Selected ${parseInt(slotKey.split("-")[1], 10) + 1}`;
+
+      // For each starred item, decide if it's already used in another slot
+      const usedElsewhere = (url) => {
+        if (slotKey === "hero" && url === frontpage.heroUrl) return false; // current slot, not "elsewhere"
+        if (slotKey !== "hero") {
+          const idx = parseInt(slotKey.split("-")[1], 10);
+          if (frontpage.selectedUrls[idx] === url) return false;
+        }
+        if (frontpage.heroUrl === url) return "Hero";
+        const sIdx = frontpage.selectedUrls.indexOf(url);
+        if (sIdx >= 0) return `Selected ${sIdx + 1}`;
+        return false;
+      };
+
+      const itemsHtml = starred.length ? starred.map(it => {
+        const used = usedElsewhere(it.link);
+        const t = getTriage(it.link);
+        const briefBadge = t.brief ? `<span style="color: var(--gold);">brief written</span>` : `<span style="color: var(--amber);">no brief yet</span>`;
+        return `
+      <div class="fp-pick-item" data-pick-url="${escapeHtml(it.link)}">
+        ${it.image ? `<img src="${escapeHtml(it.image)}" alt="">` : `<div class="noimg"></div>`}
+        <div>
+          <div class="title">${escapeHtml(it.title)}</div>
+          <div class="meta">${escapeHtml(it.author || "")} · <i>${escapeHtml(it.sourceName)}</i> · ${it.date ? it.date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : ''} · ${briefBadge}</div>
+        </div>
+        <div class="badge">${used ? `In ${used}` : (it.image ? '' : 'no image')}</div>
+      </div>`;
+      }).join("") : `<div class="empty">No starred items available.</div>`;
+
+      const html = `
+    <div class="fp-modal-backdrop" id="fp-modal-backdrop">
+      <div class="fp-modal" id="fp-modal">
+        <div class="fp-modal-head">
+          <h3>Pick a post for <em>${slotLabel}</em></h3>
+          <button class="fp-modal-close" id="fp-modal-close">Close ×</button>
+        </div>
+        <div class="fp-modal-body">${itemsHtml}</div>
+      </div>
+    </div>`;
+
+      document.body.insertAdjacentHTML("beforeend", html);
+
+      document.getElementById("fp-modal-close").addEventListener("click", closePicker);
+      document.getElementById("fp-modal-backdrop").addEventListener("click", e => {
+        if (e.target.id === "fp-modal-backdrop") closePicker();
+      });
+      document.querySelectorAll(".fp-pick-item").forEach(el => {
+        el.addEventListener("click", () => {
+          const url = el.dataset.pickUrl;
+          if (slotKey === "hero") {
+            setFeatured(url);
+          } else {
+            // Any selected slot pick promotes to the top of the ordered list.
+            promoteToSelected(url);
+          }
+          closePicker();
+          render();
+        });
+      });
+      // Escape closes
+      const esc = (e) => { if (e.key === "Escape") { closePicker(); document.removeEventListener("keydown", esc); } };
+      document.addEventListener("keydown", esc);
+    }
+
+    function closePicker() {
+      fpPickerOpen = null;
+      const el = document.getElementById("fp-modal-backdrop");
+      if (el) el.remove();
+    }
+
+    const heroItem = resolveItem(frontpage.heroUrl);
+      const selectedItems = (frontpage.selectedUrls || []).map(resolveItem);
+      const recents = [];
+
+      // Build the export object. Each slot serializes the post fields the front
+      // page needs, plus the per-post editorial brief and kicker.
+      function serialize(item, opts) {
+        if (!item) return null;
+        const t = getTriage(item.link);
+        return {
+          title: item.title,
+          link: item.link,
+          author: item.author || "",
+          sourceName: item.sourceName,
+          date: item.date ? item.date.toISOString() : null,
+          image: item.image || "",
+          excerpt: item.excerpt || "",
+          brief: t.brief || "",
+          kicker: t.kicker || (t.tags[0] || "").toUpperCase(),
+          tags: t.tags
+        };
+      }
+
+      const out = {
+        schemaVersion: 2,
+        generatedAt: new Date().toISOString(),
+        tagline: frontpage.tagline || "",
+        hero: serialize(heroItem),
+        selected: selectedItems.map(serialize).filter(Boolean),
+        recent: recents.map(serialize),
+        feeds: {
+          scientists: SCIENTIST_FEEDS.map(f => ({ name: f.name, author: f.author || "", url: f.url })),
+          writers: WRITER_FEEDS.map(f => ({ name: f.name, author: f.author || "", url: f.url }))
+        }
+      };
+
+      const json = JSON.stringify(out, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "state.json";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        a.remove();
+      }, 100);
+
+      const status = document.getElementById("fp-export-status");
+      if (status) {
+        const filled = (heroItem ? 1 : 0) + selectedItems.filter(Boolean).length;
+        status.textContent = `Downloaded · ${filled}/${4} slots + ${recents.length} recent`;
+        status.style.color = "var(--green)";
+        setTimeout(() => {
+          status.style.color = "";
+          status.textContent = exportStatusText(heroItem, selectedItems);
+        }, 3000);
+      }
+    }
+
+    function renderSettingsView() {
+      const view = document.getElementById("view-settings");
+
+      const triageCount = Object.keys(triage).length;
+      const starredCount = Object.values(triage).filter(t => t.starred).length;
+
+      // Top tags across everything
+      const freq = getTagFrequencies("all");
+      const topTags = Array.from(freq.entries())
+        .sort((a, b) => b[1].total - a[1].total || a[0].localeCompare(b[0]));
+      const tagListHtml = topTags.length
+        ? topTags.map(([tag, f]) => `
+        <div class="feed-row">
+          <span class="feed-name">${escapeHtml(tag)}</span>
+          <span class="feed-author">${f.total} item${f.total > 1 ? 's' : ''}${f.starred ? ' · ' + f.starred + ' starred' : ''}</span>
+        </div>`).join("")
+        : '<div style="color: var(--ink-faint); font-style: italic;">No tags yet.</div>';
+
+      view.innerHTML = `
+    <div class="settings">
+      <h2>Feeds — Scientists <span style="font-size: 0.78rem; font-weight: 400; color: var(--ink-faint); font-family: var(--sans);">${SCIENTIST_FEEDS.length} feed${SCIENTIST_FEEDS.length === 1 ? '' : 's'}</span></h2>
+
+      <div class="add-feed">
+        <div class="row-full">
+          <label for="add-sci-name">Display name</label>
+          <input type="text" id="add-sci-name" placeholder="e.g. Ground Truths">
+        </div>
+        <div class="row-full">
+          <label for="add-sci-url">Feed URL</label>
+          <input type="text" id="add-sci-url" placeholder="https://example.substack.com/feed">
+        </div>
+        <div>
+          <label for="add-sci-author">Author (optional)</label>
+          <input type="text" id="add-sci-author" placeholder="Eric Topol, MD">
+        </div>
+        <div class="add-feed-actions" style="align-self: end; padding-bottom: 0.05rem;">
+          <button class="add-feed-btn" id="add-sci-btn">Add feed</button>
+          <span class="add-feed-msg" id="add-sci-msg"></span>
+        </div>
+      </div>
+
+      <div class="feed-list" id="feed-list-sci">${renderFeedRows(SCIENTIST_FEEDS, "sci")}</div>
+
+      <h2>Feeds — Science Writers <span style="font-size: 0.78rem; font-weight: 400; color: var(--ink-faint); font-family: var(--sans);">${WRITER_FEEDS.length} feed${WRITER_FEEDS.length === 1 ? '' : 's'}</span></h2>
+
+      <div class="add-feed">
+        <div class="row-full">
+          <label for="add-wri-name">Display name</label>
+          <input type="text" id="add-wri-name" placeholder="e.g. Important Context">
+        </div>
+        <div class="row-full">
+          <label for="add-wri-url">Feed URL</label>
+          <input type="text" id="add-wri-url" placeholder="https://example.com/feed/">
+        </div>
+        <div>
+          <label for="add-wri-author">Author (optional)</label>
+          <input type="text" id="add-wri-author" placeholder="Author name">
+        </div>
+        <div class="add-feed-actions" style="align-self: end; padding-bottom: 0.05rem;">
+          <button class="add-feed-btn" id="add-wri-btn">Add feed</button>
+          <span class="add-feed-msg" id="add-wri-msg"></span>
+        </div>
+      </div>
+
+      <div class="feed-list" id="feed-list-wri">${renderFeedRows(WRITER_FEEDS, "wri")}</div>
+
+      <p style="font-size: 0.82rem;">
+        <button class="add-feed-btn" id="reset-feeds-btn" style="background: var(--paper-card); color: var(--accent); border: 1px solid var(--accent);">Reset feed list to defaults</button>
+      </p>
+
+      <h2>Tag vocabulary <span style="font-size: 0.78rem; font-weight: 400; color: var(--ink-faint); font-family: var(--sans);">${topTags.length} unique tag${topTags.length === 1 ? '' : 's'}</span></h2>
+      <p>Tags ordered by frequency. After a few weeks of use, the most-used tags here are what your front page sections should be.</p>
+      <div class="feed-list">${tagListHtml}</div>
+
+      <h2>Triage state</h2>
+      <p>${triageCount} items have triage state stored on this device. ${starredCount} are starred.</p>
+      <button class="danger-btn" id="reset-btn">Reset all triage</button>
+
+      <h2>Backup &amp; restore</h2>
+      <p>localStorage is browser-only and can be wiped by a browser settings change, a privacy extension, or clearing site data. Download a backup periodically; restore on any browser by uploading the file. Backups include your feed list, all tags, stars, archives, editorial briefs, kickers, and the current front-page configuration.</p>
+      <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.4rem;">
+        <button class="add-feed-btn" id="backup-download-btn">Download backup</button>
+        <label class="add-feed-btn" style="background: var(--paper-card); color: var(--ink); border: 1px solid var(--ink); cursor: pointer;">
+          Upload backup
+          <input type="file" id="backup-upload-input" accept="application/json,.json" style="display: none;">
+        </label>
+        <button class="add-feed-btn" id="restore-state-btn" style="background: var(--paper-card); color: var(--ink); border: 1px solid var(--ink);">Restore from state.json</button>
+        <span class="add-feed-msg" id="backup-msg" style="font-family: var(--mono); font-size: 0.74rem;"></span>
+      </div>
+      <p style="font-size: 0.78rem; color: var(--ink-faint); font-style: italic; margin-top: 0.4rem;">
+        <b>Download backup</b> saves a complete snapshot. <b>Upload backup</b> restores from one of those files. <b>Restore from state.json</b> partially rehydrates from a published front-page export — useful as a fallback if you have an old state.json but no full backup.
+      </p>
+
+      <h2>About</h2>
+      <p style="font-size: 0.9rem; color: var(--ink-faint);">
+        SAI Reader is a single-file editorial triage tool. Feed fetching tries
+        ${PROXIES.map(p => `<code>${p.name}</code>`).join(" then ")} in cascade —
+        if one proxy fails or rate-limits, the next is tried. Feed list, triage state,
+        and feed cache all live in this browser's localStorage. To use across devices
+        or with collaborators, a shared backend will be added in a later version.
+      </p>
+    </div>`;
+
+      // Hook up handlers
+      attachAddFeedHandlers("sci", "scientists");
+      attachAddFeedHandlers("wri", "writers");
+      attachRemoveFeedHandlers();
+      attachEditFeedHandlers();
+
+      document.getElementById("reset-feeds-btn").addEventListener("click", () => {
+        if (confirm("Reset the feed list to the built-in defaults? Any feeds you added will be removed; any feeds you removed from the defaults will return.")) {
+          resetFeedsToDefaults();
+          // Invalidate feed cache so next refresh actually re-fetches the changed list
+          localStorage.removeItem(FEED_CACHE_KEY);
+          render();
+          // Trigger refetch
+          loadAllFeeds(true);
+        }
+      });
+
+      document.getElementById("reset-btn").addEventListener("click", () => {
+        if (confirm("Reset all triage? This will clear tags, stars, and archive flags for every item on this device. This cannot be undone.")) {
+          triage = {};
+          saveTriage();
+          render();
+        }
+      });
+
+      // Backup & restore
+      document.getElementById("backup-download-btn").addEventListener("click", downloadBackup);
+      document.getElementById("backup-upload-input").addEventListener("change", handleBackupUpload);
+      document.getElementById("restore-state-btn").addEventListener("click", () => {
+        // Trigger a separate file picker for state.json restoration
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "application/json,.json";
+        input.addEventListener("change", e => handleStateJsonRestore(e));
+        input.click();
+      });
+    }
+
+    function renderFeedRows(list, prefix) {
+      if (!list.length) {
+        return '<div style="color: var(--ink-faint); font-style: italic;">No feeds in this group.</div>';
+      }
+      return list.map((f, i) => {
+        const editKey = `${prefix}-${i}`;
+        if (editingFeed === editKey) {
+          return `
+        <div class="feed-row editing" data-edit-key="${editKey}">
+          <div class="feed-edit-form">
+            <div class="row-full">
+              <label>Display name</label>
+              <input type="text" data-field="name" value="${escapeHtml(f.name)}">
+            </div>
+            <div class="row-full">
+              <label>Feed URL</label>
+              <input type="text" data-field="url" value="${escapeHtml(f.url)}">
+            </div>
+            <div class="row-full">
+              <label>Author (optional)</label>
+              <input type="text" data-field="author" value="${escapeHtml(f.author || '')}">
+            </div>
+            <div class="feed-edit-buttons">
+              <button class="feed-edit-save" data-edit-prefix="${prefix}" data-edit-idx="${i}">Save</button>
+              <button class="feed-edit-cancel">Cancel</button>
+              <span class="feed-edit-msg"></span>
+            </div>
+          </div>
+        </div>`;
+        }
+        return `
+      <div class="feed-row">
+        <span class="feed-name">
+          ${escapeHtml(f.name)}<br>
+          <span class="feed-url">${escapeHtml(f.url)}</span>
+        </span>
+        <span class="feed-author">${escapeHtml(f.author || "")}</span>
+        <span class="feed-actions">
+          <button class="feed-edit" data-edit-prefix="${prefix}" data-edit-idx="${i}">Edit</button>
+          <button class="feed-remove" data-remove-prefix="${prefix}" data-remove-idx="${i}">Remove</button>
+        </span>
+      </div>`;
+      }).join("");
+    }
+
+    function attachAddFeedHandlers(prefix, group) {
+      const btn = document.getElementById(`add-${prefix}-btn`);
+      const nameEl = document.getElementById(`add-${prefix}-name`);
+      const urlEl = document.getElementById(`add-${prefix}-url`);
+      const authorEl = document.getElementById(`add-${prefix}-author`);
+      const msgEl = document.getElementById(`add-${prefix}-msg`);
+
+      function clearMsg() { msgEl.textContent = ""; msgEl.className = "add-feed-msg"; }
+      function setMsg(text, kind) { msgEl.textContent = text; msgEl.className = "add-feed-msg " + (kind || ""); }
+
+      [nameEl, urlEl, authorEl].forEach(el => el.addEventListener("input", clearMsg));
+
+      function submit() {
+        const name = nameEl.value.trim();
+        const url = urlEl.value.trim();
+        const author = authorEl.value.trim();
+
+        if (!name) { setMsg("Display name is required", "error"); nameEl.focus(); return; }
+        if (!url) { setMsg("Feed URL is required", "error"); urlEl.focus(); return; }
+        if (!/^https?:\/\//i.test(url)) {
+          setMsg("URL must start with http:// or https://", "error"); urlEl.focus(); return;
+        }
+
+        const allFeeds = SCIENTIST_FEEDS.concat(WRITER_FEEDS);
+        if (allFeeds.some(f => f.url === url)) {
+          setMsg("That URL is already in your feed list", "error"); return;
+        }
+
+        const target = group === "scientists" ? SCIENTIST_FEEDS : WRITER_FEEDS;
+        target.push({ name, author, url });
+        saveFeeds();
+
+        nameEl.value = "";
+        urlEl.value = "";
+        authorEl.value = "";
+        setMsg("Added · fetching…", "ok");
+
+        // Invalidate cache and re-render settings; then fetch new feed in background
+        localStorage.removeItem(FEED_CACHE_KEY);
+        render();
+        loadAllFeeds(true);
+      }
+
+      btn.addEventListener("click", submit);
+      // Pressing Enter in any field submits
+      [nameEl, urlEl, authorEl].forEach(el => {
+        el.addEventListener("keydown", e => {
+          if (e.key === "Enter") { e.preventDefault(); submit(); }
+        });
+      });
+    }
+
+    function attachRemoveFeedHandlers() {
+      document.querySelectorAll(".feed-remove").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const prefix = btn.dataset.removePrefix;
+          const idx = parseInt(btn.dataset.removeIdx, 10);
+          const target = prefix === "sci" ? SCIENTIST_FEEDS : WRITER_FEEDS;
+          const feed = target[idx];
+          if (!feed) return;
+          if (!confirm(`Remove "${feed.name}" from your feed list? Items already triaged from this feed will keep their tags in storage.`)) return;
+          target.splice(idx, 1);
+          saveFeeds();
+          localStorage.removeItem(FEED_CACHE_KEY);
+          render();
+          loadAllFeeds(true);
+        });
+      });
+    }
+
+    function attachEditFeedHandlers() {
+      // Click "Edit" → switch row to edit mode
+      document.querySelectorAll(".feed-edit").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const prefix = btn.dataset.editPrefix;
+          const idx = parseInt(btn.dataset.editIdx, 10);
+          editingFeed = `${prefix}-${idx}`;
+          render();
+          // Focus first field
+          const row = document.querySelector(`[data-edit-key="${editingFeed}"]`);
+          if (row) {
+            const firstInput = row.querySelector('input[data-field="name"]');
+            if (firstInput) {
+              firstInput.focus();
+              firstInput.select();
+            }
+          }
+        });
+      });
+
+      // Cancel → exit edit mode without saving
+      document.querySelectorAll(".feed-edit-cancel").forEach(btn => {
+        btn.addEventListener("click", () => {
+          editingFeed = null;
+          render();
+        });
+      });
+
+      // Save → validate, write back, exit edit mode, refetch
+      document.querySelectorAll(".feed-edit-save").forEach(btn => {
+        btn.addEventListener("click", () => saveEditedFeed(btn));
+      });
+
+      // Enter inside any field → save; Escape → cancel
+      document.querySelectorAll('.feed-row.editing input').forEach(input => {
+        input.addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            const row = input.closest(".feed-row");
+            const saveBtn = row.querySelector(".feed-edit-save");
+            if (saveBtn) saveEditedFeed(saveBtn);
+          } else if (e.key === "Escape") {
+            editingFeed = null;
+            render();
+          }
+        });
+      });
+    }
+
+    function saveEditedFeed(btn) {
+      const prefix = btn.dataset.editPrefix;
+      const idx = parseInt(btn.dataset.editIdx, 10);
+      const target = prefix === "sci" ? SCIENTIST_FEEDS : WRITER_FEEDS;
+      const orig = target[idx];
+      if (!orig) return;
+
+      const row = btn.closest(".feed-row");
+      const msgEl = row.querySelector(".feed-edit-msg");
+      const setMsg = t => { if (msgEl) msgEl.textContent = t; };
+      setMsg("");
+
+      const name = row.querySelector('input[data-field="name"]').value.trim();
+      const url = row.querySelector('input[data-field="url"]').value.trim();
+      const author = row.querySelector('input[data-field="author"]').value.trim();
+
+      if (!name) { setMsg("Display name is required"); return; }
+      if (!url) { setMsg("Feed URL is required"); return; }
+      if (!/^https?:\/\//i.test(url)) { setMsg("URL must start with http:// or https://"); return; }
+
+      // Block duplicate URLs (excluding this row)
+      const allOthers = SCIENTIST_FEEDS.concat(WRITER_FEEDS).filter(f => f !== orig);
+      if (allOthers.some(f => f.url === url)) { setMsg("Another feed already has that URL"); return; }
+
+      // Was anything actually changed?
+      const urlChanged = url !== orig.url;
+      target[idx] = { name, author, url };
+      saveFeeds();
+
+      editingFeed = null;
+      // Only invalidate cache and refetch when the URL changed; name/author edits
+      // don't require a re-fetch.
+      if (urlChanged) {
+        localStorage.removeItem(FEED_CACHE_KEY);
+        render();
+        loadAllFeeds(true);
+      } else {
+        render();
+      }
+    }
+
+    /* ============================================================
+       BACKUP & RESTORE
+       ============================================================ */
+    const BACKUP_SCHEMA = 1;
+
+    function buildBackup() {
+      return {
+        schemaVersion: BACKUP_SCHEMA,
+        kind: "sai-reader-backup",
+        generatedAt: new Date().toISOString(),
+        feeds: {
+          scientists: SCIENTIST_FEEDS.map(f => ({ name: f.name, author: f.author || "", url: f.url })),
+          writers: WRITER_FEEDS.map(f => ({ name: f.name, author: f.author || "", url: f.url }))
+        },
+        triage: triage,        // entire triage object (URL-keyed: tags, starred, archived, brief, kicker)
+        frontpage: frontpage,  // tagline, heroUrl, selectedUrls, recentCount
+        prefs: {
+          cloudCollapsed: cloudCollapsed,
+          cloudScope: cloudScope
+        }
+      };
+    }
+
+    function downloadBackup() {
+      const data = buildBackup();
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      // Filename includes the date for chronological sorting
+      const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+      a.href = url;
+      a.download = `sai-reader-backup-${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
+
+      setBackupMsg(`Saved · ${Object.keys(triage).length} triaged items, ${SCIENTIST_FEEDS.length + WRITER_FEEDS.length} feeds`, "ok");
+    }
+
+    function setBackupMsg(text, kind) {
+      const el = document.getElementById("backup-msg");
+      if (!el) return;
+      el.textContent = text;
+      el.style.color = kind === "ok" ? "var(--green)" : kind === "error" ? "var(--accent)" : "var(--ink-faint)";
+      if (text) {
+        setTimeout(() => {
+          if (el.textContent === text) { el.textContent = ""; el.style.color = ""; }
+        }, 6000);
+      }
+    }
+
+    function handleBackupUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      // Reset the input so the same file can be re-selected later
+      e.target.value = "";
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        let data;
+        try {
+          data = JSON.parse(reader.result);
+        } catch (err) {
+          setBackupMsg("Could not parse file as JSON", "error");
+          return;
+        }
+        if (!data || data.kind !== "sai-reader-backup") {
+          setBackupMsg("This is not a SAI Reader backup file", "error");
+          return;
+        }
+        if (data.schemaVersion !== BACKUP_SCHEMA) {
+          // Don't refuse; just warn. Future-proofing.
+          console.warn("Backup schema mismatch:", data.schemaVersion, "expected", BACKUP_SCHEMA);
+        }
+        const triagedCount = data.triage ? Object.keys(data.triage).length : 0;
+        const feedCount = (data.feeds?.scientists?.length || 0) + (data.feeds?.writers?.length || 0);
+        if (!confirm(
+          `Restore from backup?\n\n` +
+          `This will REPLACE your current state with:\n` +
+          `  • ${triagedCount} triaged item${triagedCount === 1 ? '' : 's'}\n` +
+          `  • ${feedCount} feed${feedCount === 1 ? '' : 's'}\n` +
+          `  • Front-page configuration\n\n` +
+          `Backup date: ${data.generatedAt ? new Date(data.generatedAt).toLocaleString() : 'unknown'}\n\n` +
+          `Your current data will be overwritten and cannot be recovered unless you've already downloaded a backup of it.`
+        )) return;
+
+        applyBackup(data);
+        setBackupMsg(`Restored · ${triagedCount} items, ${feedCount} feeds`, "ok");
+      };
+      reader.onerror = function () {
+        setBackupMsg("Could not read file", "error");
+      };
+      reader.readAsText(file);
+    }
+
+    function applyBackup(data) {
+      if (data.feeds && Array.isArray(data.feeds.scientists) && Array.isArray(data.feeds.writers)) {
+        SCIENTIST_FEEDS.length = 0;
+        data.feeds.scientists.forEach(f => SCIENTIST_FEEDS.push({ name: f.name, author: f.author || "", url: f.url }));
+        WRITER_FEEDS.length = 0;
+        data.feeds.writers.forEach(f => WRITER_FEEDS.push({ name: f.name, author: f.author || "", url: f.url }));
+        saveFeeds();
+      }
+      if (data.triage && typeof data.triage === "object") {
+        triage = data.triage;
+        saveTriage();
+      }
+      if (data.frontpage && typeof data.frontpage === "object") {
+        frontpage = {
+          tagline: data.frontpage.tagline || "",
+          heroUrl: data.frontpage.heroUrl || "",
+          selectedUrls: Array.isArray(data.frontpage.selectedUrls) ? data.frontpage.selectedUrls.slice(0, 3) : [],
+          recentCount: data.frontpage.recentCount || 6
+        };
+        saveFrontPage();
+      }
+      if (data.prefs && typeof data.prefs === "object") {
+        if (typeof data.prefs.cloudCollapsed === "boolean") {
+          cloudCollapsed = data.prefs.cloudCollapsed;
+          localStorage.setItem("sai-reader-cloud-collapsed", cloudCollapsed ? "1" : "0");
+        }
+        if (data.prefs.cloudScope) {
+          cloudScope = data.prefs.cloudScope;
+          localStorage.setItem("sai-reader-cloud-scope", cloudScope);
+        }
+      }
+      // Force a feed re-fetch so the items list matches the restored state
+      localStorage.removeItem(FEED_CACHE_KEY);
+      render();
+      loadAllFeeds(true);
+    }
+
+    // Partial restore from a state.json (front-page export). Recovers feeds,
+    // tagline, and per-post data (tags, brief, kicker, starred) for whatever
+    // posts are mentioned in state.json.
+    function handleStateJsonRestore(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      e.target.value = "";
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        let data;
+        try {
+          data = JSON.parse(reader.result);
+        } catch (err) {
+          setBackupMsg("Could not parse file as JSON", "error");
+          return;
+        }
+        // state.json doesn't have a "kind" field — sniff for hero/selected/feeds shape
+        if (!data || (typeof data !== "object") || (data.kind && data.kind !== "sai-reader-backup")) {
+          setBackupMsg("File doesn't look like a state.json export", "error");
+          return;
+        }
+        if (data.kind === "sai-reader-backup") {
+          // User accidentally picked a real backup; offer to apply it as one
+          if (!confirm("This looks like a full backup, not a state.json. Apply it as a full restore?")) return;
+          applyBackup(data);
+          const ct = data.triage ? Object.keys(data.triage).length : 0;
+          setBackupMsg(`Restored · ${ct} items`, "ok");
+          return;
+        }
+
+        // Count what we can recover
+        const posts = [];
+        if (data.hero) posts.push(data.hero);
+        if (Array.isArray(data.selected)) posts.push(...data.selected);
+        if (Array.isArray(data.recent)) posts.push(...data.recent);
+
+        const feedsCount = (data.feeds?.scientists?.length || 0) + (data.feeds?.writers?.length || 0);
+        if (!posts.length && !feedsCount && !data.tagline) {
+          setBackupMsg("Nothing recoverable in this state.json", "error");
+          return;
+        }
+
+        if (!confirm(
+          `Partial restore from state.json?\n\n` +
+          `This will:\n` +
+          `  • Add ${feedsCount} feed${feedsCount === 1 ? '' : 's'} (replacing your current feed list)\n` +
+          `  • Restore triage (tags, briefs, kicker, starred=true) for ${posts.length} post${posts.length === 1 ? '' : 's'}\n` +
+          `  • Set front-page tagline and slot assignments\n\n` +
+          `Existing triage on other posts is preserved. Existing data on the ${posts.length} restored post${posts.length === 1 ? '' : 's'} will be overwritten.\n\n` +
+          `Continue?`
+        )) return;
+
+        // Restore feeds
+        if (data.feeds?.scientists && data.feeds?.writers) {
+          SCIENTIST_FEEDS.length = 0;
+          data.feeds.scientists.forEach(f => SCIENTIST_FEEDS.push({ name: f.name, author: f.author || "", url: f.url }));
+          WRITER_FEEDS.length = 0;
+          data.feeds.writers.forEach(f => WRITER_FEEDS.push({ name: f.name, author: f.author || "", url: f.url }));
+          saveFeeds();
+        }
+
+        // Restore triage for each mentioned post
+        posts.forEach(p => {
+          if (!p || !p.link) return;
+          triage[p.link] = {
+            tags: Array.isArray(p.tags) ? p.tags.slice() : [],
+            starred: true,             // anything in state.json was promoted, so necessarily starred
+            archived: false,
+            brief: p.brief || "",
+            kicker: p.kicker || ""
+          };
+        });
+        saveTriage();
+
+        // Restore front-page config
+        frontpage = {
+          tagline: data.tagline || "",
+          heroUrl: data.hero?.link || "",
+          selectedUrls: Array.isArray(data.selected) ? data.selected.map(p => p.link).filter(Boolean) : [],
+          recentCount: 6
+        };
+        saveFrontPage();
+
+        localStorage.removeItem(FEED_CACHE_KEY);
+        render();
+        loadAllFeeds(true);
+
+        setBackupMsg(`Partial restore · ${posts.length} posts, ${feedsCount} feeds`, "ok");
+      };
+      reader.onerror = function () {
+        setBackupMsg("Could not read file", "error");
+      };
+      reader.readAsText(file);
+    }
+
+    function itemCard(it) {
+      const t = getTriage(it.link);
+      const dateStr = it.date ? it.date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) : "";
+      const groupLabel = it.group === "scientists" ? "scientist" : "writer";
+      const thumb = it.image
+        ? `<img class="item-thumb" src="${escapeHtml(it.image)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=\\'item-thumb-placeholder\\'>NO IMAGE</div>'">`
+        : `<div class="item-thumb-placeholder">NO IMAGE</div>`;
+
+      const chips = t.tags.map(tag => `
+    <span class="tag-chip" data-tag="${escapeHtml(tag)}">
+      ${escapeHtml(tag)}<span class="x" data-action="rm-tag">×</span>
+    </span>`).join("");
+
+      const classes = ["item"];
+      if (t.starred) classes.push("starred");
+      if (t.archived) classes.push("archived");
+
+      // Editorial brief field — only shown for starred items
+      const briefHtml = t.starred ? `
+    <div class="item-brief">
+      <div class="item-brief-label">
+        Editorial Brief
+        <span class="hint">2–4 bullets · used as deck on the front page and as the social-thread post</span>
+      </div>
+      <textarea data-action="brief" placeholder="• A short bullet summarizing the post&#10;• Why it matters&#10;• Key claim or finding">${escapeHtml(t.brief || "")}</textarea>
+    </div>` : "";
+
+      return `
+    <article class="${classes.join(' ')}" data-link="${escapeHtml(it.link)}">
+      ${thumb}
+      <div class="item-body">
+        <div class="item-source">${escapeHtml(it.sourceName)}<span class="group-tag">${groupLabel}</span></div>
+        <h3 class="item-title"><a href="${escapeHtml(it.link)}" target="_blank" rel="noopener">${escapeHtml(it.title)}</a></h3>
+        <p class="item-excerpt">${escapeHtml(it.excerpt)}</p>
+        <div class="item-meta">
+          <span class="author">${escapeHtml(it.author || "")}</span>
+          <span class="dot">·</span>
+          <span class="date">${dateStr}</span>
+        </div>
+        ${briefHtml}
+      </div>
+      <div class="item-controls">
+        <div class="tag-editor ${t.tags.length ? 'has-tags' : ''}" data-action="tag-editor">
+          ${chips}
+          <input type="text" class="tag-input" placeholder="${t.tags.length ? 'add tag…' : 'add tags…'}" data-action="tag-input" autocomplete="off">
+        </div>
+        <div class="btn-row">
+          <button class="icon-btn star ${t.starred ? 'active' : ''}" data-action="star" title="Star for this week's picks">${t.starred ? '★ Starred' : '☆ Star'}</button>
+          <button class="icon-btn archive ${t.archived ? 'active' : ''}" data-action="archive" title="Archive">${t.archived ? 'Archived' : 'Archive'}</button>
+        </div>
+      </div>
+    </article>`;
+    }
+
+    function attachItemHandlers() {
+      document.querySelectorAll(".item").forEach(el => {
+        const link = el.dataset.link;
+
+        // Tag chip: click X removes tag; click chip body adds to filter
+        el.querySelectorAll(".tag-chip").forEach(chip => {
+          const tag = chip.dataset.tag;
+          const x = chip.querySelector(".x");
+          if (x) {
+            x.addEventListener("click", e => {
+              e.stopPropagation();
+              removeTag(link, tag);
+              render();
+            });
+          }
+          chip.addEventListener("click", e => {
+            if (e.target === x) return;
+            if (!activeTagFilters.includes(tag)) {
+              activeTagFilters = activeTagFilters.concat([tag]);
+              render();
+            }
+          });
+        });
+
+        // Tag editor: clicking the editor focuses the input
+        const editor = el.querySelector('[data-action="tag-editor"]');
+        const input = el.querySelector('[data-action="tag-input"]');
+        if (editor && input) {
+          editor.addEventListener("click", e => {
+            if (e.target.closest(".tag-chip")) return;
+            input.focus();
+          });
+          attachTagInput(input, editor, link);
+        }
+
+        const starBtn = el.querySelector('[data-action="star"]');
+        if (starBtn) {
+          starBtn.addEventListener("click", () => {
+            const cur = getTriage(link);
+            // Capture the post's metadata at star time so it survives feed rotation.
+            const item = allItems.find(i => i.link === link);
+            const meta = item ? {
+              title: item.title, author: item.author || "", sourceName: item.sourceName || "",
+              image: item.image || "", date: item.date ? item.date.toISOString() : "",
+              excerpt: item.excerpt || "", group: item.group || ""
+            } : {};
+            setTriage(link, Object.assign({ starred: !cur.starred }, meta));
+            render();
+          });
+        }
+        const archBtn = el.querySelector('[data-action="archive"]');
+        if (archBtn) {
+          archBtn.addEventListener("click", () => {
+            const cur = getTriage(link);
+            setTriage(link, { archived: !cur.archived });
+            render();
+          });
+        }
+
+        // Editorial Brief textarea (only present when starred).
+        // Save on every keystroke without re-rendering — re-rendering would
+        // recreate the textarea and lose focus.
+        const briefEl = el.querySelector('[data-action="brief"]');
+        if (briefEl) {
+          briefEl.addEventListener("input", () => {
+            setTriage(link, { brief: briefEl.value });
+          });
+        }
+      });
+    }
+
+    /* ============================================================
+       TAG INPUT — autocomplete + add/remove
+       ============================================================ */
+    function attachTagInput(input, editor, link) {
+      let suggestions = [];
+      let activeIdx = -1;
+
+      function closeSuggest() {
+        const drop = editor.querySelector(".tag-suggestions");
+        if (drop) drop.remove();
+        suggestions = [];
+        activeIdx = -1;
+      }
+
+      function showSuggest() {
+        closeSuggest();
+        const q = input.value.trim().toLowerCase();
+        const cur = getTriage(link).tags;
+        const freq = getTagFrequencies();
+        let candidates = Array.from(freq.entries())
+          .filter(([tag]) => !cur.includes(tag))
+          .filter(([tag]) => !q || tag.toLowerCase().includes(q))
+          .sort((a, b) => b[1].total - a[1].total || a[0].localeCompare(b[0]))
+          .slice(0, 8);
+
+        suggestions = candidates.map(c => ({ tag: c[0], freq: c[1].total, kind: "existing" }));
+
+        // If query doesn't exact-match any existing tag, add a "create new" entry
+        const exact = candidates.some(([tag]) => tag.toLowerCase() === q);
+        if (q && !exact) {
+          suggestions.push({ tag: input.value.trim(), kind: "new" });
+        }
+
+        if (!suggestions.length) return;
+
+        const drop = document.createElement("div");
+        drop.className = "tag-suggestions";
+        drop.innerHTML = suggestions.map((s, i) => `
+      <div class="tag-suggestion ${s.kind === 'new' ? 'create-new' : ''} ${i === activeIdx ? 'active' : ''}" data-idx="${i}">
+        <span>${s.kind === 'new' ? '+ create "' + escapeHtml(s.tag) + '"' : escapeHtml(s.tag)}</span>
+        ${s.kind === 'existing' ? `<span class="freq">${s.freq}</span>` : ''}
+      </div>`).join("");
+        editor.appendChild(drop);
+
+        drop.querySelectorAll(".tag-suggestion").forEach(el => {
+          el.addEventListener("mousedown", e => {
+            e.preventDefault();
+            const i = parseInt(el.dataset.idx, 10);
+            commit(suggestions[i].tag);
+          });
+        });
+      }
+
+      function commit(tag) {
+        if (tag) addTag(link, tag);
+        input.value = "";
+        closeSuggest();
+        render();
+      }
+
+      input.addEventListener("input", () => {
+        activeIdx = -1;
+        showSuggest();
+      });
+
+      input.addEventListener("focus", () => {
+        showSuggest();
+      });
+
+      input.addEventListener("blur", () => {
+        // Delay so click on a suggestion can fire first
+        setTimeout(closeSuggest, 150);
+      });
+
+      input.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === ",") {
+          e.preventDefault();
+          // If a suggestion is highlighted, take it; else commit raw input
+          if (activeIdx >= 0 && suggestions[activeIdx]) {
+            commit(suggestions[activeIdx].tag);
+          } else {
+            commit(input.value.trim());
+          }
+        } else if (e.key === "ArrowDown") {
+          if (!suggestions.length) return;
+          e.preventDefault();
+          activeIdx = (activeIdx + 1) % suggestions.length;
+          updateActive();
+        } else if (e.key === "ArrowUp") {
+          if (!suggestions.length) return;
+          e.preventDefault();
+          activeIdx = activeIdx <= 0 ? suggestions.length - 1 : activeIdx - 1;
+          updateActive();
+        } else if (e.key === "Escape") {
+          closeSuggest();
+        } else if (e.key === "Backspace" && input.value === "") {
+          // Remove last tag
+          const cur = getTriage(link).tags;
+          if (cur.length) {
+            e.preventDefault();
+            removeTag(link, cur[cur.length - 1]);
+            render();
+          }
+        }
+      });
+
+      function updateActive() {
+        const drop = editor.querySelector(".tag-suggestions");
+        if (!drop) return;
+        drop.querySelectorAll(".tag-suggestion").forEach((el, i) => {
+          el.classList.toggle("active", i === activeIdx);
+        });
+      }
+    }
+
+    function escapeHtml(s) {
+      if (s == null) return "";
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    /* ============================================================
+       EVENTS
+       ============================================================ */
+    document.getElementById("tab-list").addEventListener("click", e => {
+      const btn = e.target.closest(".tab");
+      if (!btn) return;
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      btn.classList.add("active");
+      activeTab = btn.dataset.tab;
+      // Cancel any in-progress feed edit when navigating away
+      if (activeTab !== "settings") editingFeed = null;
+      // Close picker if open
+      if (activeTab !== "frontpage") closePicker();
+      render();
+    });
+
+    document.getElementById("refresh-btn").addEventListener("click", () => {
+      loadAllFeeds(true);
+    });
+
+    document.getElementById("search-input").addEventListener("input", e => {
+      searchQuery = e.target.value;
+      render();
+    });
+
+    document.getElementById("show-archived").addEventListener("change", e => {
+      showArchived = e.target.checked;
+      render();
+    });
+
+    /* ============================================================
+       GO
+       ============================================================ */
+    loadAllFeeds(false);
+  </script>
+</body>
+
+</html>
