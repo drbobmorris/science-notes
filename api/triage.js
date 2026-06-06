@@ -46,6 +46,20 @@ async function handler(req, res) {
   if (typeof body.brief === "string") patch.brief = body.brief;
   if (typeof body.kicker === "string") patch.kicker = body.kicker;
 
+  // Post metadata — stored on every triage write so each record is a
+  // self-contained, permanent entry in the searchable archive. This is what
+  // lets Picks, the Front Page builder, and publish render a post WITHOUT the
+  // live RSS feed (which only spans the last 14 days). Only overwrite a stored
+  // field when the client sends a non-empty value, so a later feed-less write
+  // never blanks metadata captured earlier.
+  if (typeof body.title === "string" && body.title) patch.title = body.title;
+  if (typeof body.author === "string" && body.author) patch.author = body.author;
+  if (typeof body.sourceName === "string" && body.sourceName) patch.sourceName = body.sourceName;
+  if (typeof body.image === "string") patch.image = body.image; // image may legitimately be "" 
+  if (typeof body.date === "string" && body.date) patch.date = body.date;
+  if (typeof body.excerpt === "string" && body.excerpt) patch.excerpt = body.excerpt;
+  if (typeof body.group === "string" && body.group) patch.group = body.group;
+
   try {
     const db = await getDb();
     await db.collection(COLLECTIONS.TRIAGE).updateOne(

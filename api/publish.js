@@ -67,36 +67,45 @@ async function handler(req, res) {
       interestingUrls.add(t._id);
     }
 
-    // Helper: build a published-post object from URL + triage + RSS item data
+    // Helper: build a published-post object from URL + triage + (optional) RSS item data.
+    // Falls back to metadata stored on the triage document when no live RSS item
+    // was supplied, so posts older than the 14-day feed window still publish.
     function serialize(url) {
       if (!url) return null;
-      const item = itemsByUrl[url];
-      if (!item) return null;
-      const t = starredByUrl[url] || {};
+      const item = itemsByUrl[url];        // live RSS item, if reader sent one
+      const t = starredByUrl[url] || {};   // triage doc (has stored metadata)
+      const src = item || t;               // prefer fresh feed data, else stored
+      if (!src || !(src.title)) return null; // nothing to render with
       return {
-        title: item.title,
+        title: src.title,
         link: url,
-        author: item.author || "",
-        sourceName: item.sourceName,
-        date: item.date || null,
-        image: item.image || "",
-        excerpt: item.excerpt || "",
+        author: src.author || "",
+        sourceName: src.sourceName || "",
+        date: src.date || null,
+        image: src.image || "",
+        excerpt: src.excerpt || "",
         brief: t.brief || "",
         kicker: t.kicker || (Array.isArray(t.tags) && t.tags[0] ? t.tags[0].toUpperCase() : ""),
         tags: Array.isArray(t.tags) ? t.tags : [],
       };
     }
 
-    const hero = serialize(fp.heroUrl);
+    // Featured (pinned hero) + ordered Selected (up to 6). heroUrl holds the
+    // pinned featured post; selectedUrls is the ordered list, newest-promoted first.
+    const featured = serialize(fp.heroUrl);
     const selected = (fp.selectedUrls || [])
+      .filter(u => u && u !== fp.heroUrl) // featured never duplicated in selected
       .map(serialize)
-      .filter(Boolean);
+      .filter(Boolean)
+      .slice(0, 6);
 
-    // Recent: starred URLs by date desc, excluding hero & selected, capped
+    // Recent: retained for backward compatibility with older state.json consumers,
+    // but the current front page renders featured + selected. Built from stored
+    // metadata so it no longer depends on the live feed window.
     const exclude = new Set([fp.heroUrl, ...(fp.selectedUrls || [])].filter(Boolean));
     const recent = allStarred
-      .filter(t => !exclude.has(t._id) && itemsByUrl[t._id])
-      .map(t => ({ url: t._id, date: itemsByUrl[t._id].date, t }))
+      .filter(t => !exclude.has(t._id) && (itemsByUrl[t._id] || t.title))
+      .map(t => ({ url: t._id, date: (itemsByUrl[t._id] && itemsByUrl[t._id].date) || t.date, t }))
       .sort((a, b) => {
         const da = a.date ? new Date(a.date).getTime() : 0;
         const db_ = b.date ? new Date(b.date).getTime() : 0;
@@ -111,7 +120,8 @@ async function handler(req, res) {
       generatedAt: new Date().toISOString(),
       generatedBy: auth.editor,
       tagline: fp.tagline || "",
-      hero,
+      hero: featured,        // "hero" key retained; holds the pinned featured post
+      featured,              // explicit alias for the new model
       selected,
       recent,
       feeds: configDoc.feeds || { scientists: [], writers: [] },
@@ -133,7 +143,7 @@ async function handler(req, res) {
       at: new Date(),
       commitSha: commit.commitSha,
       slotCounts: {
-        hero: hero ? 1 : 0,
+        hero: featured ? 1 : 0,
         selected: selected.length,
         recent: recent.length,
       },
@@ -143,7 +153,7 @@ async function handler(req, res) {
       ok: true,
       commit,
       slotCounts: {
-        hero: hero ? 1 : 0,
+        hero: featured ? 1 : 0,
         selected: selected.length,
         recent: recent.length,
       },
