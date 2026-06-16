@@ -1,41 +1,112 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-06-10T15:55:38.809Z",
+  "generatedAt": "2026-06-16T17:12:50.158Z",
   "generatedBy": "Bob",
   "tagline": "RFK/Trump misunderstand vaccines and their power to save lives. The champion of free speech stays silent on ADA censorship.",
   "hero": {
-    "title": "The Baloney Protection Act",
-    "link": "https://sciencebasedmedicine.org/the-baloney-protection-act/?utm_source=rss&utm_medium=rss&utm_campaign=the-baloney-protection-act",
-    "author": "Steven Novella, MD",
-    "sourceName": "SBM- Steven Novella",
-    "date": "2026-06-10T12:26:53.000Z",
-    "image": "https://sciencebasedmedicine.org/wp-content/uploads/2017/09/homeopathy1-480x408.jpg",
-    "excerpt": "We have had to endure a great deal of interference from government in the conduct of institutions that should be governed by science and evidence. I’m sorry to report – here is one more. Senators Mike Lee (R-UT) and Tommy Tuberville (R- AL) have recently introduced a bill that would limit the FDA’s ability to regulate ",
-    "brief": "- Sens. Lee and Tuberville filed a bill to block FDA regulation of homeopathy.\n- Bill eliminates need for testing of efficacy or even ingredients \n- Snake Oil Legalization Act",
-    "kicker": "FDA",
+    "title": "Nature Is My Hobby, Not My Doctor",
+    "link": "https://theunbiasedscipod.substack.com/p/nature-is-my-hobby-not-my-doctor",
+    "author": "Jess Steier, DrPH",
+    "sourceName": "Unbiased Science",
+    "date": "2026-06-15T12:14:44.000Z",
+    "image": "https://substack-post-media.s3.amazonaws.com/public/images/aa6a2675-a634-4ae0-aba8-8b0d1e72f93b_1200x630.png",
+    "excerpt": "You can trust the science and still be a little crunchy",
+    "brief": "-\"Natural\" marketing fuses two ideas: making things (good) and refusing medicine (dangerous).\n-Dose, not pronounceability, defines toxicity.\n- Keep the garden. Keep the vaccine.",
+    "kicker": "MAHA",
     "tags": [
-      "FDA",
-      "MAHA",
-      "Policy"
+      "MAHA"
     ]
   },
   "featured": {
-    "title": "The Baloney Protection Act",
-    "link": "https://sciencebasedmedicine.org/the-baloney-protection-act/?utm_source=rss&utm_medium=rss&utm_campaign=the-baloney-protection-act",
-    "author": "Steven Novella, MD",
-    "sourceName": "SBM- Steven Novella",
-    "date": "2026-06-10T12:26:53.000Z",
-    "image": "https://sciencebasedmedicine.org/wp-content/uploads/2017/09/homeopathy1-480x408.jpg",
-    "excerpt": "We have had to endure a great deal of interference from government in the conduct of institutions that should be governed by science and evidence. I’m sorry to report – here is one more. Senators Mike Lee (R-UT) and Tommy Tuberville (R- AL) have recently introduced a bill that would limit the FDA’s ability to regulate ",
-    "brief": "- Sens. Lee and Tuberville filed a bill to block FDA regulation of homeopathy.\n- Bill eliminates need for testing of efficacy or even ingredients \n- Snake Oil Legalization Act",
-    "kicker": "FDA",
+    "title": "Nature Is My Hobby, Not My Doctor",
+    "link": "https://theunbiasedscipod.substack.com/p/nature-is-my-hobby-not-my-doctor",
+    "author": "Jess Steier, DrPH",
+    "sourceName": "Unbiased Science",
+    "date": "2026-06-15T12:14:44.000Z",
+    "image": "https://substack-post-media.s3.amazonaws.com/public/images/aa6a2675-a634-4ae0-aba8-8b0d1e72f93b_1200x630.png",
+    "excerpt": "You can trust the science and still be a little crunchy",
+    "brief": "-\"Natural\" marketing fuses two ideas: making things (good) and refusing medicine (dangerous).\n-Dose, not pronounceability, defines toxicity.\n- Keep the garden. Keep the vaccine.",
+    "kicker": "MAHA",
     "tags": [
-      "FDA",
-      "MAHA",
-      "Policy"
+      "MAHA"
     ]
   },
   "selected": [
+    {
+      "title": "Fact Check, Part 5: Continued Leadership Vacuum at NIH with the Continued Absence of Institute and Center Directors",
+      "link": "https://27unihted.substack.com/p/fact-check-part-5-continued-leadership",
+      "author": "27UNIHted",
+      "sourceName": "27UNIHted",
+      "date": "2026-06-16T16:15:58.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!gl2Z!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe266f799-92d5-4174-8cfe-6f3ffb739fc8_1233x1067.jpeg",
+      "excerpt": "Bhattacharya fails to meet his promise to hire Leaders within the month",
+      "brief": "NIH director vacancies:\n\n13 of 27 NIH institutes still lack directors 3 months after Bhattacharya promised hiring \"this month.\"\nNew NIEHS director is a JD Vance friend, not an environmental health expert.\nNo external review",
+      "kicker": "POLICY",
+      "tags": [
+        "Policy",
+        "Politics",
+        "NIH"
+      ]
+    },
+    {
+      "title": "A New Path to Preventing Cancer",
+      "link": "https://erictopol.substack.com/p/a-new-path-to-preventing-cancer",
+      "author": "Eric Topol, MD",
+      "sourceName": "Ground Truths",
+      "date": "2026-06-13T14:03:17.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!N2_G!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F63ad16b2-46a3-47c4-a2dd-44b06deb8b2a_2752x1536.png",
+      "excerpt": "A Landmark Study Showing the Way Forward",
+      "brief": "-14-protein blood signature predicts lung cancer 5+ years before diagnosis.\n-Validated across 8 cohorts, including never-smokers.\n-IL-1β antibody cut risk in half in high-risk group.",
+      "kicker": "MEDICINE",
+      "tags": [
+        "Medicine",
+        "Cancer"
+      ]
+    },
+    {
+      "title": "Virology Research is Not a Crime",
+      "link": "https://rasmussenretorts.substack.com/p/virology-research-is-not-a-crime",
+      "author": "Angela Rasmussen, PhD",
+      "sourceName": "Rasmussen Retorts",
+      "date": "2026-06-12T05:58:42.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!rnmb!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F174ee9d6-18d0-4b82-a6e4-99daf0519734_1080x1350.png",
+      "excerpt": "Free Vincent Munster and Claude Kwe",
+      "brief": "Free Munster and Kwe:\nNIH virologists Vincent Munster and Claude Kwe charged for paperwork on inactivated mpox samples.\nDOJ's own evidence shows no pathogen, no smuggling.\nA pretext to criminalize virology.",
+      "kicker": "POLITICS",
+      "tags": [
+        "Politics",
+        "virology"
+      ]
+    },
+    {
+      "title": "The Storm Before the Storm: An Executive Order, Religious Exemptions, and More",
+      "link": "https://theunbiasedscipod.substack.com/p/the-storm-before-the-storm",
+      "author": "Jess Steier, DrPH",
+      "sourceName": "Unbiased Science",
+      "date": "2026-06-11T20:28:08.000Z",
+      "image": "https://substack-post-media.s3.amazonaws.com/public/images/19fc3b68-60e7-4a26-a6d6-b074c31eaa7e_1200x630.png",
+      "excerpt": "The State of U.S. Vaccine Policy | June 11, 2026",
+      "brief": "Trump EO directs CDC/ACIP to realign childhood schedule to \"peer countries.\"\nACOG issued its own pregnancy schedule, diverging from CDC.\nReligious-exemption lawsuits advancing.",
+      "kicker": "VACCINES",
+      "tags": [
+        "Vaccines"
+      ]
+    },
+    {
+      "title": "The last hantavirus cruise passenger still locked down by Dr. Jay Bhattacharya and the CDC.",
+      "link": "https://insidemedicine.substack.com/p/the-last-passenger-locked-down-by",
+      "author": "Jeremy Faust, MD",
+      "sourceName": "Inside Medicine",
+      "date": "2026-06-11T10:02:58.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!_qbF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4848b052-af12-44c8-9764-eedb769fbd37_1321x769.png",
+      "excerpt": "The results of a hearing last week remain in limbo.",
+      "brief": "Last hantavirus passenger held:\n\n17 of 18 MV Hondius passengers have left the Nebraska quarantine unit.\nOnly Angela Perryman remains, held by a CDC order signed by Bhattacharya.\nShe's the one who spoke out first.",
+      "kicker": "HANTAVIRUS",
+      "tags": [
+        "hantavirus",
+        "Bhattacharya"
+      ]
+    },
     {
       "title": "President Trump’s Childhood Vaccine Schedule",
       "link": "https://pauloffit.substack.com/p/president-trumps-childhood-vaccine",
@@ -51,18 +122,48 @@
         "MAHA",
         "Policy"
       ]
-    },
+    }
+  ],
+  "recent": [
     {
-      "title": "OMB is Waging a Disinformation Campaign",
-      "link": "https://elizabethginexi.substack.com/p/omb-is-waging-a-disinformation-campaign",
-      "author": "Elizabeth Ginexi, PhD",
-      "sourceName": "Elizabeth Ginexi",
-      "date": "2026-06-04T14:45:25.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!y5iS!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5e9f70b0-ed19-4f3b-a454-2b9f07f7127f_5000x5000.jpeg",
-      "excerpt": "They are Lying About the Reasons for Changing OMB’s Federal Financial Assistance Rule",
-      "brief": "- OMB justifies its grant rule with fabricated talking points: \"drag shows in Ecuador,\" \"transgender mice.\"\n- Both lies trace to Heritage/Rand Paul.\n- Disinformation rewriting $1.1T in grants.",
+      "title": "Measles, bird flu, and Ebola are spreading. NIH just made its disease experts easier to fire.",
+      "link": "https://www.celinegounder.com/p/nih-schedule-policy-career-disease-experts",
+      "author": "Celine Gounder, MD",
+      "sourceName": "What I can and Can't Say on TV",
+      "date": "2026-06-12T12:45:36.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!9iX7!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F12be0ad4-1a3a-4dbd-9f4e-f77712af251c_1321x1791.png",
+      "excerpt": "A June reclassification quietly stripped civil-service protections from the senior NIH staff who decide what infectious research gets funded, removing checks to catch politically motivated firings.",
+      "brief": "NIH staff stripped of protections:\n\nNIH senior staff who decide what research gets funded had civil service protections quietly stripped June 3.\nNow \"at will,\" no outside appeal.\nComes amid measles, Ebola, bird flu spread.",
       "kicker": "",
       "tags": []
+    },
+    {
+      "title": "The Probationary Project Pt. 3: Impacts to the American Public",
+      "link": "https://27unihted.substack.com/p/the-probationary-project-pt-3-impacts",
+      "author": "27UNIHted",
+      "sourceName": "27UNIHted",
+      "date": "2026-06-11T16:02:22.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!B2uO!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F02a5f0aa-fb2e-4f8e-b828-b435d8982d15_1440x818.png",
+      "excerpt": "Read a breakdown of the impact of the probationary firings to the American Public",
+      "brief": "",
+      "kicker": "",
+      "tags": []
+    },
+    {
+      "title": "The Baloney Protection Act",
+      "link": "https://sciencebasedmedicine.org/the-baloney-protection-act/?utm_source=rss&utm_medium=rss&utm_campaign=the-baloney-protection-act",
+      "author": "Steven Novella, MD",
+      "sourceName": "SBM- Steven Novella",
+      "date": "2026-06-10T12:26:53.000Z",
+      "image": "https://sciencebasedmedicine.org/wp-content/uploads/2017/09/homeopathy1-480x408.jpg",
+      "excerpt": "We have had to endure a great deal of interference from government in the conduct of institutions that should be governed by science and evidence. I’m sorry to report – here is one more. Senators Mike Lee (R-UT) and Tommy Tuberville (R- AL) have recently introduced a bill that would limit the FDA’s ability to regulate ",
+      "brief": "- Sens. Lee and Tuberville filed a bill to block FDA regulation of homeopathy.\n- Bill eliminates need for testing of efficacy or even ingredients \n- Snake Oil Legalization Act",
+      "kicker": "FDA",
+      "tags": [
+        "FDA",
+        "MAHA",
+        "Policy"
+      ]
     },
     {
       "title": "Will NIH Director Jay Bhattacharya stand up for scientists censored by the American Diabetes Association?",
@@ -93,106 +194,6 @@
       "tags": [
         "virology",
         "Misinformation"
-      ]
-    },
-    {
-      "title": "Federal charges, international isolation, ideological purges and the administration's plan to create regime scientists in the US",
-      "link": "https://www.protagonist-science.com/p/federal-charges-international-isolation",
-      "author": "Philip Markolin, PhD",
-      "sourceName": "Protagonist Science",
-      "date": "2026-06-04T21:52:14.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!BgZw!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbb1898ec-bde0-4fa3-84e5-2dd93cf0b911_1231x688.png",
-      "excerpt": "I wish this wasn't a real headline either",
-      "brief": "DOJ press releases against foreign-born scientists echo lab-leak conspiracy framing.\nEastern Michigan US Attorney leads the spree.\nOMB rule layers on political control. Get on board or get out.",
-      "kicker": "",
-      "tags": []
-    },
-    {
-      "title": "The COVID Amnesia Project: Erasing Your Free Will to Preserve the Fantasy of the Optional Pandemic",
-      "link": "https://sciencebasedmedicine.org/covid-amnesia-erases-freewill/?utm_source=rss&utm_medium=rss&utm_campaign=covid-amnesia-erases-freewill",
-      "author": "Jonathan Howard, MD",
-      "sourceName": "Jonathan Howard",
-      "date": "2026-06-05T07:34:00.000Z",
-      "image": "https://sciencebasedmedicine.org/wp-content/uploads/2026/06/image-1-480x320.png",
-      "excerpt": "Countless millions of Americans prioritized their health and protecting their neighbors over an imagined return to normal in 2020. Our sacrifices deserve recognition and gratitude, not amnesia and revisionist history from sheltered political scientists. The post The COVID Amnesia Project: Erasing Your Free Will to Pres",
-      "brief": "- Revisionists pretend 2020 normalcy was possible if only leaders had said so.\n- Reality: COVID killed 1000s of young Americans; people avoided it on their own.\n- Their sacrifices deserve gratitude, not erasure.",
-      "kicker": "",
-      "tags": []
-    }
-  ],
-  "recent": [
-    {
-      "title": "Senate HSGAC Itty Bitty Turbo Cancer Subcommittee Hearing",
-      "link": "https://rasmussenretorts.substack.com/p/senate-hsgac-itty-bitty-turbo-cancer",
-      "author": "Angela Rasmussen, PhD",
-      "sourceName": "Rasmussen Retorts",
-      "date": "2026-06-04T00:57:38.000Z",
-      "image": "",
-      "excerpt": "Sorry about the echo but I think it makes it seem more like the circus it was",
-      "brief": "- Sen. Ron Johnson's HSGAC subcommittee staged a fact-free anti-vax circus on \"turbo cancer.\"\n- Witnesses included Dalgleish, Hazan, Malhotra.\n- Blumenthal brought actual oncology evidence.",
-      "kicker": "VACCINES",
-      "tags": [
-        "Vaccines",
-        "COVID",
-        "Cancer"
-      ]
-    },
-    {
-      "title": "Chair of President’s Cancer Panel Co-Authors Ivermectin Cancer Study Backed By Supplements Company",
-      "link": "https://www.importantcontext.news/p/chair-of-presidents-cancer-panel",
-      "author": "Walker Bragman",
-      "sourceName": "Important Context",
-      "date": "2026-06-03T18:06:04.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!JUOY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1674ad5d-4450-4aa4-bef0-d534d5890f95_1308x977.jpeg",
-      "excerpt": "“It’s marketing disguised as science.”",
-      "brief": "-Harvey Risch joins the Wellness Company\nUnproven treatment at inconsistent doses with no controls\n-Patients, never examined, had a dozen different cancer types, many on conventional treatment\n-Marketing disguised as research\n\n",
-      "kicker": "MAHA",
-      "tags": [
-        "MAHA",
-        "Policy"
-      ]
-    },
-    {
-      "title": "Minerals, deportations, and medicine. Inside Trump’s bilateral health agreements.",
-      "link": "https://www.celinegounder.com/p/bilateral-health-deals-trump-donors-kenya-ebola",
-      "author": "Celine Gounder, MD",
-      "sourceName": "What I can and Can't Say on TV",
-      "date": "2026-06-03T12:29:53.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!2sMh!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe0d1efed-1822-4a52-807e-a6f4f3cac15a_506x1024.png",
-      "excerpt": "The Trump administration signed bilateral health deals with over 30 countries. Public records show who donated, who benefited, and what happened to countries that refused.",
-      "brief": "Trump's Graft and Extortion Racquet Comes for Public Health\n-Trump signed bilateral health deals with 32 countries, worth $20.3B.\n-Deals tied to tariffs, deportations & mineral access.\n-Inaugural donors hold business in recipient nations.\n-Countries that refused lost funding.",
-      "kicker": "POLICY",
-      "tags": [
-        "Policy"
-      ]
-    },
-    {
-      "title": "In Animal Study, Nanobots Repair Spinal Cords",
-      "link": "https://sciencebasedmedicine.org/in-animal-study-nanobots-repair-spinal-cords/?utm_source=rss&utm_medium=rss&utm_campaign=in-animal-study-nanobots-repair-spinal-cords",
-      "author": "Steven Novella, MD",
-      "sourceName": "SBM- Steven Novella",
-      "date": "2026-06-03T11:38:29.000Z",
-      "image": "https://sciencebasedmedicine.org/wp-content/uploads/2026/06/spinal-cord-injury-480x240.jpg",
-      "excerpt": "For my entire career as a neurologist the ability to repair an injured spinal cord has been one of the holy grails. There has always been promising new research that definitely increases our knowledge but doesn’t lead to an effective treatment. This is not for lack of trying – I also remember the period when Christophe",
-      "brief": "",
-      "kicker": "MEDICINE",
-      "tags": [
-        "Medicine"
-      ]
-    },
-    {
-      "title": "Scoop: HHS asks confined hantavirus cruise passengers to assist in propaganda.",
-      "link": "https://insidemedicine.substack.com/p/scoop-hhs-asks-confined-hantavirus",
-      "author": "Jeremy Faust, MD",
-      "sourceName": "Inside Medicine",
-      "date": "2026-06-02T19:17:31.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!A3xk!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff213f604-9670-4a24-af55-b00d811f7034_1179x1226.jpeg",
-      "excerpt": "The US Department of Health and Human Services invited the Andes hantavirus-exposed former MV Hondius cruise ship passengers staying in a National Quarantine Unit in Nebraska to participate in some free government propaganda.",
-      "brief": "From Lockdown Hate to Quarantine Lovefest\n-HHS asked hantavirus-exposed MV Hondius passengers in Nebraska quarantine to share \"fun\" room photos.\n-Passengers still face 42-day monitoring.\n-Stunt undermines the seriousness of biosecurity.",
-      "kicker": "HANTAVIRUS",
-      "tags": [
-        "hantavirus",
-        "Policy"
       ]
     }
   ],
@@ -291,17 +292,12 @@
       {
         "name": "27UNIHted",
         "author": "27UNIHted",
-        "url": "https://substack.com/@27unihted/feed"
-      },
-      {
-        "name": "Health Checks on History",
-        "author": "Ming Yang",
-        "url": "https://substack.com/@mingyang152"
+        "url": "https://27unihted.substack.com/feed"
       },
       {
         "name": "Science Matters",
         "author": "Joshua Weitz",
-        "url": "https://substack.com/@joshuasweitz/feed"
+        "url": "https://joshuasweitz.substack.com/feed"
       }
     ],
     "writers": [
