@@ -3834,7 +3834,7 @@
     <div class="item-brief">
       <div class="item-brief-label">
         Editorial Brief
-        <span class="hint">2–4 bullets · used as deck on the front page and as the social-thread post</span>
+        <span class="hint">≤220 characters · repostable to any platform · used as the front-page deck and social post</span>
         <button type="button" data-action="summarize" data-link="${escapeHtml(it.link)}" title="Generate this brief automatically from the post" style="margin-left:0.6rem;font-family:'IBM Plex Sans',sans-serif;font-size:0.64rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;background:transparent;color:#7a1f2b;border:1px solid #d4cab5;border-radius:2px;padding:0.18rem 0.5rem;cursor:pointer;">${(t.brief && t.brief.trim()) ? '↻ Regenerate' : '✦ Summarize'}</button>
       </div>
       <textarea data-action="brief" placeholder="• A short bullet summarizing the post&#10;• Why it matters&#10;• Key claim or finding">${escapeHtml(t.brief || "")}</textarea>
