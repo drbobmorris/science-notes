@@ -1,37 +1,69 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-06-17T15:55:28.597Z",
+  "generatedAt": "2026-06-17T19:42:23.613Z",
   "generatedBy": "Bob",
   "tagline": "Natural is not a prevention strategy. Leadership vacuum at NIH. AI + proteomics = earlier CA detection, Bhattacharya now Dr. Lockdown",
   "hero": {
-    "title": "Nature Is My Hobby, Not My Doctor",
-    "link": "https://theunbiasedscipod.substack.com/p/nature-is-my-hobby-not-my-doctor",
-    "author": "Jess Steier, DrPH",
-    "sourceName": "Unbiased Science",
-    "date": "2026-06-15T12:14:44.000Z",
-    "image": "https://substack-post-media.s3.amazonaws.com/public/images/aa6a2675-a634-4ae0-aba8-8b0d1e72f93b_1200x630.png",
-    "excerpt": "You can trust the science and still be a little crunchy",
-    "brief": "-MAHA is implicitly based on \"Natural\"=Good. Synthetic =Bad.\n-Medicine and vaccines are considered synthetic\n-This is simplistic and dangerous.\n- Keep the garden. Keep the vaccine.",
-    "kicker": "MAHA",
+    "title": "Agentic AI Comes to Medicine",
+    "link": "https://erictopol.substack.com/p/agentic-ai-comes-to-medicine",
+    "author": "Eric Topol, MD",
+    "sourceName": "Ground Truths",
+    "date": "2026-06-17T15:02:25.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!pMMA!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F842cf916-478a-41e3-b767-d0730dee57c1_2998x1454.png",
+    "excerpt": "Expansion of Capabilities With Two New Medical AI Models",
+    "brief": "AI Doctors Outperform Physicians in Simulations\n- MIRA hit 87.8% diagnostic accuracy vs. 78.1% for board-certified MDs across 500 ER cases.\n- AIME matched PCPs overall; by visit 3, its plans rated 98% vs. 81%.",
+    "kicker": "AI",
     "tags": [
-      "MAHA"
+      "AI",
+      "Medicine"
     ]
   },
   "featured": {
-    "title": "Nature Is My Hobby, Not My Doctor",
-    "link": "https://theunbiasedscipod.substack.com/p/nature-is-my-hobby-not-my-doctor",
-    "author": "Jess Steier, DrPH",
-    "sourceName": "Unbiased Science",
-    "date": "2026-06-15T12:14:44.000Z",
-    "image": "https://substack-post-media.s3.amazonaws.com/public/images/aa6a2675-a634-4ae0-aba8-8b0d1e72f93b_1200x630.png",
-    "excerpt": "You can trust the science and still be a little crunchy",
-    "brief": "-MAHA is implicitly based on \"Natural\"=Good. Synthetic =Bad.\n-Medicine and vaccines are considered synthetic\n-This is simplistic and dangerous.\n- Keep the garden. Keep the vaccine.",
-    "kicker": "MAHA",
+    "title": "Agentic AI Comes to Medicine",
+    "link": "https://erictopol.substack.com/p/agentic-ai-comes-to-medicine",
+    "author": "Eric Topol, MD",
+    "sourceName": "Ground Truths",
+    "date": "2026-06-17T15:02:25.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!pMMA!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F842cf916-478a-41e3-b767-d0730dee57c1_2998x1454.png",
+    "excerpt": "Expansion of Capabilities With Two New Medical AI Models",
+    "brief": "AI Doctors Outperform Physicians in Simulations\n- MIRA hit 87.8% diagnostic accuracy vs. 78.1% for board-certified MDs across 500 ER cases.\n- AIME matched PCPs overall; by visit 3, its plans rated 98% vs. 81%.",
+    "kicker": "AI",
     "tags": [
-      "MAHA"
+      "AI",
+      "Medicine"
     ]
   },
   "selected": [
+    {
+      "title": "Nature Is My Hobby, Not My Doctor",
+      "link": "https://theunbiasedscipod.substack.com/p/nature-is-my-hobby-not-my-doctor",
+      "author": "Jess Steier, DrPH",
+      "sourceName": "Unbiased Science",
+      "date": "2026-06-15T12:14:44.000Z",
+      "image": "https://substack-post-media.s3.amazonaws.com/public/images/aa6a2675-a634-4ae0-aba8-8b0d1e72f93b_1200x630.png",
+      "excerpt": "You can trust the science and still be a little crunchy",
+      "brief": "-MAHA is implicitly based on \"Natural\"=Good. Synthetic =Bad.\n-Medicine and vaccines are considered synthetic\n-This is simplistic and dangerous.\n- Keep the garden. Keep the vaccine.",
+      "kicker": "MAHA",
+      "tags": [
+        "MAHA"
+      ]
+    },
+    {
+      "title": "Trump DOJ Settles Lawsuit By Vaccine Skeptic Despite Winning in Court",
+      "link": "https://www.importantcontext.news/p/trump-doj-settles-lawsuit-by-vaccine",
+      "author": "Walker Bragman",
+      "sourceName": "Important Context",
+      "date": "2026-06-17T11:01:01.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!kLGe!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fec5ed1ef-f151-4599-bba8-5cc13411b6b1_1411x1056.jpeg",
+      "excerpt": "Anti-mRNA vaccine writer Alex Berenson received a six-figure payout from the case.",
+      "brief": "DOJ Pays Trump Allies After Winning Cases\n- Berenson got $150K despite court dismissal.\n- Expert calls settlements \"clearly political,\" funded by taxpayers.",
+      "kicker": "VACCINES",
+      "tags": [
+        "Vaccines",
+        "Misinformation",
+        "Politics"
+      ]
+    },
     {
       "title": "Fact Check, Part 5: Continued Leadership Vacuum at NIH with the Continued Absence of Institute and Center Directors",
       "link": "https://27unihted.substack.com/p/fact-check-part-5-continued-leadership",
@@ -91,37 +123,6 @@
       "tags": [
         "Vaccines"
       ]
-    },
-    {
-      "title": "The last hantavirus cruise passenger still locked down by Dr. Jay Bhattacharya and the CDC.",
-      "link": "https://insidemedicine.substack.com/p/the-last-passenger-locked-down-by",
-      "author": "Jeremy Faust, MD",
-      "sourceName": "Inside Medicine",
-      "date": "2026-06-11T10:02:58.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!_qbF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4848b052-af12-44c8-9764-eedb769fbd37_1321x769.png",
-      "excerpt": "The results of a hearing last week remain in limbo.",
-      "brief": "Last hantavirus passenger held:\n\n17 of 18 MV Hondius passengers have left the Nebraska quarantine unit.\nOnly Angela Perryman remains, held by a CDC order signed by Bhattacharya.\nShe's the one who spoke out first.",
-      "kicker": "HANTAVIRUS",
-      "tags": [
-        "hantavirus",
-        "Bhattacharya"
-      ]
-    },
-    {
-      "title": "President Trump’s Childhood Vaccine Schedule",
-      "link": "https://pauloffit.substack.com/p/president-trumps-childhood-vaccine",
-      "author": "Paul Offit, MD",
-      "sourceName": "Beyond the Noise",
-      "date": "2026-06-08T11:03:02.000Z",
-      "image": "https://substack-post-media.s3.amazonaws.com/public/images/73d2bc1d-a8d7-4214-b5f1-9cf47faad1d8_1200x630.png",
-      "excerpt": "Donald Trump recently issued two executive orders claiming that children in the United States are receiving too many vaccines.",
-      "brief": "- Trump's EOs claim kids get too many vaccines today vs. 1980.\n- Reality: smallpox vaccine alone had more immune components than all 17 today's vaccines combined.\n- More vaccines = fewer deaths.",
-      "kicker": "VACCINES",
-      "tags": [
-        "Vaccines",
-        "MAHA",
-        "Policy"
-      ]
     }
   ],
   "recent": [
@@ -150,6 +151,21 @@
       "tags": []
     },
     {
+      "title": "The last hantavirus cruise passenger still locked down by Dr. Jay Bhattacharya and the CDC.",
+      "link": "https://insidemedicine.substack.com/p/the-last-passenger-locked-down-by",
+      "author": "Jeremy Faust, MD",
+      "sourceName": "Inside Medicine",
+      "date": "2026-06-11T10:02:58.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!_qbF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4848b052-af12-44c8-9764-eedb769fbd37_1321x769.png",
+      "excerpt": "The results of a hearing last week remain in limbo.",
+      "brief": "Last hantavirus passenger held:\n\n17 of 18 MV Hondius passengers have left the Nebraska quarantine unit.\nOnly Angela Perryman remains, held by a CDC order signed by Bhattacharya.\nShe's the one who spoke out first.",
+      "kicker": "HANTAVIRUS",
+      "tags": [
+        "hantavirus",
+        "Bhattacharya"
+      ]
+    },
+    {
       "title": "The Baloney Protection Act",
       "link": "https://sciencebasedmedicine.org/the-baloney-protection-act/?utm_source=rss&utm_medium=rss&utm_campaign=the-baloney-protection-act",
       "author": "Steven Novella, MD",
@@ -166,34 +182,19 @@
       ]
     },
     {
-      "title": "Will NIH Director Jay Bhattacharya stand up for scientists censored by the American Diabetes Association?",
-      "link": "https://sciencebasedmedicine.org/will-bhattacharya-stand-up-for-scientists-censored-by-ada/?utm_source=rss&utm_medium=rss&utm_campaign=will-bhattacharya-stand-up-for-scientists-censored-by-ada",
-      "author": "David Gorski, MD, PhD",
-      "sourceName": "David Gorski- SBM",
-      "date": "2026-06-08T05:00:00.000Z",
-      "image": "https://sciencebasedmedicine.org/wp-content/uploads/2022/09/Censorship-480x270.jpg",
-      "excerpt": "Last Friday, the American Diabetes Association censored diabetes researchers at its annual meeting who opposed the Trump administration's NIH policies. Will \"Flame of Freedom\" winner Jay Bhattcharya speak up? The post Will NIH Director Jay Bhattacharya stand up for scientists censored by the American Diabetes Associati",
-      "brief": "- ADA had police eject top diabetes researchers for handing out a Diabetes Care editorial critical of Trump NIH cuts.\n- Bhattacharya, scheduled to speak, was a no-show.\n- \"Flame of Freedom\" winner stays silent.",
-      "kicker": "MAHA",
+      "title": "President Trump’s Childhood Vaccine Schedule",
+      "link": "https://pauloffit.substack.com/p/president-trumps-childhood-vaccine",
+      "author": "Paul Offit, MD",
+      "sourceName": "Beyond the Noise",
+      "date": "2026-06-08T11:03:02.000Z",
+      "image": "https://substack-post-media.s3.amazonaws.com/public/images/73d2bc1d-a8d7-4214-b5f1-9cf47faad1d8_1200x630.png",
+      "excerpt": "Donald Trump recently issued two executive orders claiming that children in the United States are receiving too many vaccines.",
+      "brief": "- Trump's EOs claim kids get too many vaccines today vs. 1980.\n- Reality: smallpox vaccine alone had more immune components than all 17 today's vaccines combined.\n- More vaccines = fewer deaths.",
+      "kicker": "VACCINES",
       "tags": [
+        "Vaccines",
         "MAHA",
-        "Politics",
-        "Medicine"
-      ]
-    },
-    {
-      "title": "DOJ Charges NIH Virologists for Transporting Inactive Virus",
-      "link": "https://drbobmorris.substack.com/p/nih-monkeypox-researchers-charged",
-      "author": "Bob Morris, MD, PhD",
-      "sourceName": "The Skeptical Scientist",
-      "date": "2026-06-06T00:57:19.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!WSqY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8f3cd370-baf2-48bf-a95b-41da853df66e_1738x1452.png",
-      "excerpt": "Monkeypox Researchers Charged with Semantics Violation",
-      "brief": "- DOJ charged two NIH virologists with \"smuggling\" monkeypox.\n- FBI testing found only inactivated virus, incapable of causing disease.\n- Real offense: calling harmless samples \"diagnostic equipment\" to a customs agent.",
-      "kicker": "VIROLOGY",
-      "tags": [
-        "virology",
-        "Misinformation"
+        "Policy"
       ]
     }
   ],
