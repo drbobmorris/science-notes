@@ -4,17 +4,22 @@
 // commits it to the science-notes GitHub repo, which triggers a Vercel
 // redeploy of the public site at notes.scienceaccountability.org.
 //
+// Since the homepage now reads live from /api/homepage, this committed
+// state.json serves as a versioned snapshot and as the homepage's fallback
+// when the live endpoint/DB is unavailable. The actual front-page assembly is
+// shared with the live endpoint via _lib/frontpage.js so the two can't diverge.
+//
 // Body shape:
 //   {
 //     items: [{ link, title, author, sourceName, date, image, excerpt }, ...]
 //   }
 //
-// The reader must supply the RSS item data because the API doesn't fetch RSS
-// itself — the reader already has parsed items in memory and knows which ones
-// are in hero/selected/recent slots. The API combines those item details with
-// MongoDB-stored triage (tags, brief, kicker) to produce the final state.json.
+// The reader may supply live RSS item data so the freshest feed metadata is
+// preferred; any posts not in the feed window fall back to the metadata stored
+// on their triage documents.
 
-import { getDb, COLLECTIONS, CONFIG_DOC_ID } from "./_lib/mongo.js";
+import { getDb, COLLECTIONS } from "./_lib/mongo.js";
+import { buildFrontpageData } from "./_lib/frontpage.js";
 import { checkAuth, withCors } from "./_lib/auth.js";
 import { commitFile } from "./_lib/github.js";
 
@@ -29,12 +34,9 @@ async function handler(req, res) {
 
   const body = req.body || {};
   const items = Array.isArray(body.items) ? body.items : [];
-  if (!items.length) {
-    res.status(400).json({ error: "items array is required (RSS item details)" });
-    return;
-  }
 
-  // Index items by link for fast lookup
+  // Index any supplied live RSS items by link for fast lookup. Optional now —
+  // the builder falls back to stored triage metadata when an item is absent.
   const itemsByUrl = {};
   for (const it of items) {
     if (it && it.link) itemsByUrl[it.link] = it;
@@ -43,121 +45,48 @@ async function handler(req, res) {
   try {
     const db = await getDb();
 
-    const configDoc = await db.collection(COLLECTIONS.CONFIG).findOne({ _id: CONFIG_DOC_ID });
-    if (!configDoc?.frontpage) {
-      res.status(400).json({ error: "No frontpage configured yet" });
+    const built = await buildFrontpageData(db, itemsByUrl);
+    if (!built.ok) {
+      res.status(400).json({ error: built.error });
       return;
     }
-    const fp = configDoc.frontpage;
-
-    // Fetch triage for all URLs we care about: hero, selected, plus all starred
-    // (the starred set is the source for the auto-fill recent list).
-    const interestingUrls = new Set();
-    if (fp.heroUrl) interestingUrls.add(fp.heroUrl);
-    for (const u of fp.selectedUrls || []) {
-      if (u) interestingUrls.add(u);
-    }
-
-    const allStarred = await db.collection(COLLECTIONS.TRIAGE)
-      .find({ starred: true })
-      .toArray();
-    const starredByUrl = {};
-    for (const t of allStarred) {
-      starredByUrl[t._id] = t;
-      interestingUrls.add(t._id);
-    }
-
-    // Helper: build a published-post object from URL + triage + (optional) RSS item data.
-    // Falls back to metadata stored on the triage document when no live RSS item
-    // was supplied, so posts older than the 14-day feed window still publish.
-    function serialize(url) {
-      if (!url) return null;
-      const item = itemsByUrl[url];        // live RSS item, if reader sent one
-      const t = starredByUrl[url] || {};   // triage doc (has stored metadata)
-      const src = item || t;               // prefer fresh feed data, else stored
-      if (!src || !(src.title)) return null; // nothing to render with
-      return {
-        title: src.title,
-        link: url,
-        author: src.author || "",
-        sourceName: src.sourceName || "",
-        date: src.date || null,
-        image: src.image || "",
-        excerpt: src.excerpt || "",
-        brief: t.brief || "",
-        kicker: t.kicker || (Array.isArray(t.tags) && t.tags[0] ? t.tags[0].toUpperCase() : ""),
-        tags: Array.isArray(t.tags) ? t.tags : [],
-      };
-    }
-
-    // Featured (pinned hero) + ordered Selected (up to 6). heroUrl holds the
-    // pinned featured post; selectedUrls is the ordered list, newest-promoted first.
-    const featured = serialize(fp.heroUrl);
-    const selected = (fp.selectedUrls || [])
-      .filter(u => u && u !== fp.heroUrl) // featured never duplicated in selected
-      .map(serialize)
-      .filter(Boolean)
-      .slice(0, 6);
-
-    // Recent: retained for backward compatibility with older state.json consumers,
-    // but the current front page renders featured + selected. Built from stored
-    // metadata so it no longer depends on the live feed window.
-    const exclude = new Set([fp.heroUrl, ...(fp.selectedUrls || [])].filter(Boolean));
-    const recent = allStarred
-      .filter(t => !exclude.has(t._id) && (itemsByUrl[t._id] || t.title))
-      .map(t => ({ url: t._id, date: (itemsByUrl[t._id] && itemsByUrl[t._id].date) || t.date, t }))
-      .sort((a, b) => {
-        const da = a.date ? new Date(a.date).getTime() : 0;
-        const db_ = b.date ? new Date(b.date).getTime() : 0;
-        return db_ - da;
-      })
-      .slice(0, fp.recentCount || 6)
-      .map(({ url }) => serialize(url))
-      .filter(Boolean);
 
     const out = {
       schemaVersion: 2,
       generatedAt: new Date().toISOString(),
       generatedBy: auth.editor,
-      tagline: fp.tagline || "",
-      hero: featured,        // "hero" key retained; holds the pinned featured post
-      featured,              // explicit alias for the new model
-      selected,
-      recent,
-      feeds: configDoc.feeds || { scientists: [], writers: [] },
+      ...built.data,
     };
 
     const stateJson = JSON.stringify(out, null, 2);
 
-    // Commit to GitHub
+    // Commit to GitHub (triggers a Vercel redeploy with the fresh snapshot).
     const commit = await commitFile({
       path: "state.json",
       content: stateJson,
-      message: `Publish: ${fp.tagline ? fp.tagline.slice(0, 60) : "weekly update"} (by ${auth.editor})`,
+      message: `Publish: ${
+        out.tagline ? out.tagline.slice(0, 60) : "weekly update"
+      } (by ${auth.editor})`,
       editor: auth.editor,
     });
 
-    db.collection(COLLECTIONS.ACTIVITY).insertOne({
-      type: "publish",
-      editor: auth.editor,
-      at: new Date(),
-      commitSha: commit.commitSha,
-      slotCounts: {
-        hero: featured ? 1 : 0,
-        selected: selected.length,
-        recent: recent.length,
-      },
-    }).catch(() => {});
+    const slotCounts = {
+      hero: out.featured ? 1 : 0,
+      selected: out.selected.length,
+      recent: out.recent.length,
+    };
 
-    res.status(200).json({
-      ok: true,
-      commit,
-      slotCounts: {
-        hero: featured ? 1 : 0,
-        selected: selected.length,
-        recent: recent.length,
-      },
-    });
+    db.collection(COLLECTIONS.ACTIVITY)
+      .insertOne({
+        type: "publish",
+        editor: auth.editor,
+        at: new Date(),
+        commitSha: commit.commitSha,
+        slotCounts,
+      })
+      .catch(() => {});
+
+    res.status(200).json({ ok: true, commit, slotCounts });
   } catch (err) {
     console.error("POST /api/publish error:", err);
     res.status(500).json({ error: "Server error", detail: err.message });

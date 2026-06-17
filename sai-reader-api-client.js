@@ -175,7 +175,7 @@
   function patchSaveFunctions() {
     if (typeof window.setTriage === 'function' && !window.setTriage._saiPatched) {
       const orig = window.setTriage;
-      window.setTriage = function(url, patch) {
+      window.setTriage = function (url, patch) {
         orig(url, patch);
         const current = window.getTriage(url);
         debounceWrite('triage:' + url, 300, async () => {
@@ -265,6 +265,68 @@
     }
     return { items, missing };
   }
+
+  // Track in-flight summary requests so we don't fire duplicates (e.g. a fast
+  // double-star, or a star + manual click).
+  const summarizing = {};
+
+  // Generate an editorial brief for a post via /api/summarize and save it
+  // through the Reader's normal triage path. By default it's a no-op when a
+  // brief already exists (so starring never clobbers a hand-written brief);
+  // pass { force: true } from the Regenerate button to overwrite.
+  async function summarize(url, opts) {
+    opts = opts || {};
+    if (!url || summarizing[url]) return;
+
+    const t = (typeof window.getTriage === 'function') ? window.getTriage(url) : {};
+    if (!opts.force && t && t.brief && t.brief.trim()) return; // cached — don't redo
+
+    const item = (typeof window.findItemByUrl === 'function') ? window.findItemByUrl(url) : null;
+
+    summarizing[url] = true;
+    setSummarizeButtonState(url, true);
+    toast('Summarizing…');
+
+    try {
+      const result = await apiPost('/summarize', {
+        url,
+        title: (item && item.title) || (t && t.title) || '',
+        author: (item && item.author) || (t && t.author) || '',
+        sourceName: (item && item.sourceName) || (t && t.sourceName) || '',
+        excerpt: (item && item.excerpt) || (t && t.excerpt) || '',
+      });
+      if (result && result.brief && typeof window.setTriage === 'function') {
+        window.setTriage(url, { brief: result.brief });
+        if (typeof window.render === 'function') window.render();
+        toast('Summary added', 'ok');
+      } else {
+        toast('No summary returned', 'error');
+      }
+    } catch (err) {
+      console.error('Summarize failed:', err);
+      toast('Summary failed: ' + err.message.slice(0, 90), 'error');
+    } finally {
+      delete summarizing[url];
+      setSummarizeButtonState(url, false);
+    }
+  }
+
+  // Reflect in-flight state on the matching Summarize/Regenerate button(s).
+  function setSummarizeButtonState(url, busy) {
+    document
+      .querySelectorAll('[data-action="summarize"][data-link="' + (window.CSS && CSS.escape ? CSS.escape(url) : url) + '"]')
+      .forEach((btn) => {
+        btn.disabled = busy;
+        if (busy) {
+          btn.dataset.prevLabel = btn.textContent;
+          btn.textContent = '… summarizing';
+        } else if (btn.dataset.prevLabel) {
+          btn.textContent = btn.dataset.prevLabel;
+          delete btn.dataset.prevLabel;
+        }
+      });
+  }
+
   async function publishToSite() {
     if (typeof window.findItemByUrl !== 'function') {
       toast('Reader not fully loaded yet. Wait for feeds to load and try again.', 'error');
@@ -383,6 +445,7 @@
     sync: syncFromServer,
     apiGet, apiPost,
     publish: publishToSite,
+    summarize,
     getEditor,
     gatherItemsForPublish,  // exposed for debugging
     signOut: () => {

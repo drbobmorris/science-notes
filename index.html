@@ -54,7 +54,7 @@
 <meta name="twitter:image" content="https://notes.scienceaccountability.org/images/og-card.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --ink:        #1a1613;
@@ -80,6 +80,7 @@
   --sub-pill:   #f0f0ec;
 
   --serif:      'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --read:       'Carlito', Calibri, 'IBM Plex Sans', -apple-system, sans-serif;
   --sans:       'IBM Plex Sans', -apple-system, sans-serif;
   --mono:       'IBM Plex Mono', monospace;
   --sub-font:   -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -88,7 +89,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: var(--serif);
+  font-family: var(--read);
   background: var(--paper);
   color: var(--ink);
   line-height: 1.5;
@@ -136,7 +137,8 @@ body {
   color: var(--ink-soft);
   font-weight: 500;
 }
-.masthead-title .strap .sai { color: var(--accent); font-weight: 600; }
+.masthead-title .strap .sai { color: var(--accent); font-weight: 600; text-decoration: none; }
+.masthead-title .strap a.sai:hover { text-decoration: underline; }
 
 .masthead-nav {
   display: flex; justify-content: center; gap: 2.2rem;
@@ -190,15 +192,15 @@ section { padding: 3rem 0; }
 .hero-lead h2 a { color: var(--ink); text-decoration: none; }
 .hero-lead h2 a:hover { color: var(--accent); }
 .hero-lead .deck {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--read);
+  font-style: normal;
   font-size: 1.2rem;
   color: var(--accent);
   margin-bottom: 1rem;
   font-variation-settings: "opsz" 144;
 }
 .hero-lead .standfirst {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 1.05rem;
   line-height: 1.6;
   color: var(--ink);
@@ -352,7 +354,7 @@ section { padding: 3rem 0; }
 .article-card h3 a { color: var(--ink); text-decoration: none; }
 .article-card h3 a:hover { color: var(--accent); }
 .article-card .excerpt {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 0.95rem;
   line-height: 1.5;
   color: var(--ink-soft);
@@ -395,7 +397,7 @@ section { padding: 3rem 0; }
 }
 .weekly h2 .num { font-style: normal; font-weight: 300; color: var(--gold); }
 .weekly p {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 1.05rem; line-height: 1.55;
   color: rgba(247, 243, 236, 0.85);
   max-width: 50ch;
@@ -620,7 +622,7 @@ footer {
   padding: 0;
 }
 .weekly-section ul.bullets li {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 0.95rem; line-height: 1.35;
   color: var(--ink);
   padding: 0.35rem 0 0.35rem 1rem;
@@ -668,7 +670,7 @@ footer {
   margin-bottom: 0.8rem;
 }
 .follow-page .intro {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 1.15rem;
   line-height: 1.55;
   color: var(--ink-soft);
@@ -787,7 +789,7 @@ footer {
   font-variation-settings: "opsz" 144;
 }
 .blogs-page .lede {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 1.05rem; line-height: 1.55;
   color: var(--ink-soft);
   margin-bottom: 2.5rem;
@@ -844,7 +846,7 @@ footer {
   opacity: 0.75;
 }
 .blog-entry .blog-desc {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 0.92rem;
   line-height: 1.4;
   color: var(--ink-soft);
@@ -870,7 +872,7 @@ footer {
   font-variation-settings: "opsz" 144;
 }
 .suggest-block p {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 1rem; line-height: 1.5;
   color: var(--ink-soft);
   margin-bottom: 1.4rem;
@@ -895,7 +897,7 @@ footer {
 .suggest-form textarea {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 0.95rem;
   background: var(--paper);
   border: 1px solid var(--rule-soft);
@@ -1318,7 +1320,7 @@ footer {
   text-transform: uppercase;
 }
 .commenter-strip .who {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 1rem;
   font-variation-settings: "opsz" 144;
 }
@@ -1405,7 +1407,7 @@ footer {
   margin-bottom: 0.25rem;
 }
 .clerical-item .val {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 0.98rem;
   color: var(--ink);
   line-height: 1.4;
@@ -1449,7 +1451,7 @@ footer {
   color: rgba(247, 243, 236, 0.7);
 }
 .cite-narrative {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 0.98rem; line-height: 1.55;
   color: var(--ink);
   font-variation-settings: "opsz" 144;
@@ -1457,7 +1459,7 @@ footer {
 .cite-narrative b { font-weight: 600; color: var(--accent); }
 
 .contributor-review {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 1rem;
   line-height: 1.6;
   color: var(--ink);
@@ -1491,7 +1493,7 @@ footer {
   margin-bottom: 0.7rem;
 }
 .empty-state p {
-  font-family: var(--serif);
+  font-family: var(--read);
   font-size: 0.98rem; line-height: 1.5;
   color: var(--ink);
   max-width: 56ch;
@@ -1556,11 +1558,11 @@ footer {
   <div class="masthead-top container">
     <div class="vol" id="state-updated">Loading…</div>
     <div></div>
-    <div>Free to read · <a href="#" style="color:var(--accent); text-decoration:none;">Subscribe</a></div>
+    <div>Free to read · <a href="https://scienceaccountability.substack.com/" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none;">Subscribe</a></div>
   </div>
   <div class="masthead-title">
     <h1>Science <span class="now">Notes</span></h1>
-    <div class="strap">A publication of the <span class="sai">Science Accountability Institute</span></div>
+    <div class="strap">A publication of the <a class="sai" href="https://scienceaccountability.org" target="_blank" rel="noopener">Science Accountability Institute</a></div>
   </div>
   <nav class="masthead-nav" aria-label="Topics we cover">
     <span>Environmental Health</span>
@@ -1701,11 +1703,11 @@ footer {
   <div class="masthead-top container">
     <div class="vol">Follow · Subscribe</div>
     <div></div>
-    <div>Free to read · <a href="#" style="color:var(--accent); text-decoration:none;">Subscribe</a></div>
+    <div>Free to read · <a href="https://scienceaccountability.substack.com/" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none;">Subscribe</a></div>
   </div>
   <div class="masthead-title">
     <h1>Science <span class="now">Notes</span></h1>
-    <div class="strap">A publication of the <span class="sai">Science Accountability Institute</span></div>
+    <div class="strap">A publication of the <a class="sai" href="https://scienceaccountability.org" target="_blank" rel="noopener">Science Accountability Institute</a></div>
   </div>
 </header>
 
@@ -1899,11 +1901,11 @@ footer {
   <div class="masthead-top container">
     <div class="vol">Vol. I · No. 4</div>
     <div class="date">Tuesday, May 5, 2026</div>
-    <div>Free to read · <a href="#" style="color:var(--accent); text-decoration:none;">Subscribe</a></div>
+    <div>Free to read · <a href="https://scienceaccountability.substack.com/" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none;">Subscribe</a></div>
   </div>
   <div class="masthead-title">
     <h1>Science <span class="now">Notes</span></h1>
-    <div class="strap">A publication of the <span class="sai">Science Accountability Institute</span></div>
+    <div class="strap">A publication of the <a class="sai" href="https://scienceaccountability.org" target="_blank" rel="noopener">Science Accountability Institute</a></div>
   </div>
 </header>
 
@@ -2083,11 +2085,11 @@ footer {
   <div class="masthead-top container">
     <div class="vol">Vol. I · No. 4</div>
     <div class="date">Tuesday, May 5, 2026</div>
-    <div>Free to read · <a href="#" style="color:var(--accent); text-decoration:none;">Subscribe</a></div>
+    <div>Free to read · <a href="https://scienceaccountability.substack.com/" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none;">Subscribe</a></div>
   </div>
   <div class="masthead-title">
     <h1>Science <span class="now">Notes</span></h1>
-    <div class="strap">A publication of the <span class="sai">Science Accountability Institute</span></div>
+    <div class="strap">A publication of the <a class="sai" href="https://scienceaccountability.org" target="_blank" rel="noopener">Science Accountability Institute</a></div>
   </div>
 </header>
 
@@ -2266,8 +2268,12 @@ footer {
      ============================================================ -->
 <script>
 (function() {
-  // Where to look for the state file. Same directory as this HTML by default.
-  var STATE_URL = "state.json";
+  // Primary data source: live homepage state rebuilt from MongoDB on every
+  // request, so the front page is always current. If it's unavailable (DB/API
+  // down, or no front page configured yet), fall back to the committed static
+  // state.json snapshot, which a scheduled job keeps fresh.
+  var STATE_URL = "/api/homepage";
+  var STATE_FALLBACK_URL = "state.json";
 
   // Convert ISO date string to a "May 7, 2026"-style display string.
   function formatDate(iso) {
@@ -2468,29 +2474,38 @@ footer {
     }).join("");
   }
 
-  fetch(STATE_URL, { cache: "no-cache" })
-    .then(function(r) {
+  function applyState(state) {
+    if (!state || typeof state !== "object") return;
+    renderTimestamp(state.generatedAt);
+    renderTagline(state.tagline);
+    if (state.hero) renderHero(state.hero);
+    if (Array.isArray(state.selected)) {
+      renderSelected(state.selected);
+      renderFollowSelected(state.selected);
+    }
+    if (Array.isArray(state.recent)) renderRecent(state.recent);
+    if (state.feeds) renderBlogs(state.feeds);
+  }
+
+  function fetchState(url) {
+    return fetch(url, { cache: "no-cache" }).then(function(r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
       return r.json();
-    })
-    .then(function(state) {
-      if (!state || typeof state !== "object") return;
-      renderTimestamp(state.generatedAt);
-      renderTagline(state.tagline);
-      if (state.hero) renderHero(state.hero);
-      if (Array.isArray(state.selected)) {
-        renderSelected(state.selected);
-        renderFollowSelected(state.selected);
-      }
-      if (Array.isArray(state.recent)) renderRecent(state.recent);
-      if (state.feeds) renderBlogs(state.feeds);
+    });
+  }
+
+  // Live endpoint first; on any failure, fall back to the static snapshot.
+  fetchState(STATE_URL)
+    .then(applyState)
+    .catch(function(primaryErr) {
+      if (window.console) console.info("[Science Notes] live state unavailable, using state.json fallback:", primaryErr.message);
+      return fetchState(STATE_FALLBACK_URL).then(applyState);
     })
     .catch(function(err) {
-      // No state.json or malformed — just leave the hard-coded markup in place.
+      // Neither source available — leave the hard-coded markup in place.
       var el = document.getElementById("state-updated");
       if (el) el.textContent = "";
-      // Comment for debugging — visible in DevTools console but not on the page
-      if (window.console) console.info("[Science Notes] state.json not loaded:", err.message);
+      if (window.console) console.info("[Science Notes] state not loaded:", err.message);
     });
 })();
 </script>

@@ -1,2 +1,4 @@
 .DS_Store
 sai-reader.json
+node_modules/
+package-lock.json

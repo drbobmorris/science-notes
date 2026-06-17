@@ -10,6 +10,34 @@ if (!GH_TOKEN) {
   console.warn("GITHUB_TOKEN not set — /api/publish will fail");
 }
 
+// Read a single file's current text content from the repo. Returns
+// { content, sha } if the file exists, or null if it doesn't (404).
+// Used by the scheduled refresh to compare against the current state.json and
+// skip a commit (and the redeploy it triggers) when nothing has changed.
+export async function getFileContent(path) {
+  if (!GH_TOKEN) {
+    throw new Error("GitHub token not configured");
+  }
+  const res = await fetch(
+    `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${encodeURIComponent(path)}?ref=${GH_BRANCH}`,
+    {
+      headers: {
+        "Authorization": `Bearer ${GH_TOKEN}`,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }
+  );
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    const errBody = await res.text();
+    throw new Error(`GitHub GET failed (${res.status}): ${errBody.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  const content = Buffer.from(data.content || "", "base64").toString("utf-8");
+  return { content, sha: data.sha };
+}
+
 // Commit a single file to the repo. If the file already exists, this is a replacement
 // (same path, new content). If it's new, this creates it.
 //

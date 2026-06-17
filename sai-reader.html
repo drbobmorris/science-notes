@@ -57,7 +57,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
     rel="stylesheet">
   <style>
     :root {
@@ -81,6 +81,7 @@
       --slate-soft: #d8dde2;
 
       --serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+      --read: 'Carlito', Calibri, 'IBM Plex Sans', -apple-system, sans-serif;
       --sans: 'IBM Plex Sans', -apple-system, sans-serif;
       --mono: 'IBM Plex Mono', monospace;
     }
@@ -407,7 +408,7 @@
     }
 
     .item-excerpt {
-      font-family: var(--serif);
+      font-family: var(--read);
       font-size: 0.92rem;
       color: var(--ink-soft);
       line-height: 1.45;
@@ -470,7 +471,7 @@
 
     .item-brief textarea {
       width: 100%;
-      font-family: var(--serif);
+      font-family: var(--read);
       font-size: 0.88rem;
       padding: 0.45rem 0.6rem;
       border: 1px solid var(--rule-soft);
@@ -766,7 +767,7 @@
     }
 
     .empty {
-      font-family: var(--serif);
+      font-family: var(--read);
       font-style: italic;
       color: var(--ink-faint);
       padding: 3rem 1rem;
@@ -1344,7 +1345,7 @@
     }
 
     .fp-intro {
-      font-family: var(--serif);
+      font-family: var(--read);
       font-size: 1rem;
       color: var(--ink-soft);
       line-height: 1.55;
@@ -1381,7 +1382,7 @@
 
     .fp-tagline-input {
       width: 100%;
-      font-family: var(--serif);
+      font-family: var(--read);
       font-size: 1.05rem;
       padding: 0.7rem 0.9rem;
       border: 1px solid var(--rule-soft);
@@ -1411,8 +1412,13 @@
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
+
     @media (min-width: 721px) {
-      .fp-selected-area { grid-template-columns: repeat(3, 1fr); } /* 6 items => 2 rows of 3 */
+      .fp-selected-area {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      /* 6 items => 2 rows of 3 */
     }
 
     .fp-slot {
@@ -1449,7 +1455,7 @@
     .fp-slot-empty {
       color: var(--ink-faint);
       font-style: italic;
-      font-family: var(--serif);
+      font-family: var(--read);
       font-size: 0.95rem;
       flex: 1;
       display: flex;
@@ -1612,7 +1618,7 @@
 
     .fp-slot-brief {
       width: 100%;
-      font-family: var(--serif);
+      font-family: var(--read);
       font-size: 0.88rem;
       padding: 0.5rem 0.6rem;
       border: 1px solid var(--rule-soft);
@@ -2824,7 +2830,7 @@
         .filter(Boolean)
         .sort((a, b) => (b.date ? b.date.getTime() : 0) - (a.date ? a.date.getTime() : 0));
     }
-    
+
     // Compute which posts auto-fill the "Recent Posts" sidebar.
     // We exclude anything already in Hero or Selected so the same post doesn't
     // appear twice on the front page.
@@ -3829,6 +3835,7 @@
       <div class="item-brief-label">
         Editorial Brief
         <span class="hint">2–4 bullets · used as deck on the front page and as the social-thread post</span>
+        <button type="button" data-action="summarize" data-link="${escapeHtml(it.link)}" title="Generate this brief automatically from the post" style="margin-left:0.6rem;font-family:'IBM Plex Sans',sans-serif;font-size:0.64rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;background:transparent;color:#7a1f2b;border:1px solid #d4cab5;border-radius:2px;padding:0.18rem 0.5rem;cursor:pointer;">${(t.brief && t.brief.trim()) ? '↻ Regenerate' : '✦ Summarize'}</button>
       </div>
       <textarea data-action="brief" placeholder="• A short bullet summarizing the post&#10;• Why it matters&#10;• Key claim or finding">${escapeHtml(t.brief || "")}</textarea>
     </div>` : "";
@@ -3899,6 +3906,7 @@
         if (starBtn) {
           starBtn.addEventListener("click", () => {
             const cur = getTriage(link);
+            const willStar = !cur.starred;
             // Capture the post's metadata at star time so it survives feed rotation.
             const item = allItems.find(i => i.link === link);
             const meta = item ? {
@@ -3906,8 +3914,14 @@
               image: item.image || "", date: item.date ? item.date.toISOString() : "",
               excerpt: item.excerpt || "", group: item.group || ""
             } : {};
-            setTriage(link, Object.assign({ starred: !cur.starred }, meta));
+            setTriage(link, Object.assign({ starred: willStar }, meta));
             render();
+            // Auto-generate an editorial brief the first time a post is starred,
+            // unless one already exists. Runs server-side; updates the brief when done.
+            if (willStar && !(cur.brief && cur.brief.trim()) &&
+                window.SAI_API && typeof window.SAI_API.summarize === "function") {
+              window.SAI_API.summarize(link);
+            }
           });
         }
         const archBtn = el.querySelector('[data-action="archive"]');
@@ -3926,6 +3940,16 @@
         if (briefEl) {
           briefEl.addEventListener("input", () => {
             setTriage(link, { brief: briefEl.value });
+          });
+        }
+
+        // Manual "Summarize / Regenerate" button — force a fresh brief.
+        const sumBtn = el.querySelector('[data-action="summarize"]');
+        if (sumBtn) {
+          sumBtn.addEventListener("click", () => {
+            if (window.SAI_API && typeof window.SAI_API.summarize === "function") {
+              window.SAI_API.summarize(link, { force: true });
+            }
           });
         }
       });
