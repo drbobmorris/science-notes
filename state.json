@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-06-18T15:35:11.558Z",
-  "generatedBy": "Bob",
+  "generatedAt": "2026-06-23T08:00:02.298Z",
+  "generatedBy": "scheduled-refresh",
   "tagline": "AI is coming to medical practice. Natural is not a prevention strategy. Trump DOJ reimburses misinformation. Leadership vacuum at NIH. ",
   "hero": {
     "title": "Agentic AI Comes to Medicine",
@@ -127,6 +127,42 @@
   ],
   "recent": [
     {
+      "title": "Lysenkoism 2.0 in action: Robert  F. Kennedy Jr. abuses his power to bully journal editors over a retraction",
+      "link": "https://sciencebasedmedicine.org/lysenkoism-in-action-rfkijr-abuses-his-power/?utm_source=rss&utm_medium=rss&utm_campaign=lysenkoism-in-action-rfkijr-abuses-his-power",
+      "author": "David Gorski, MD, PhD",
+      "sourceName": "David Gorski- SBM",
+      "date": "2026-06-22T07:00:00.000Z",
+      "image": "https://sciencebasedmedicine.org/wp-content/uploads/2025/03/Lysenkoism1-480x360.jpg",
+      "excerpt": "A journal editor decided to retract and remove a bad study by an antivaxxer named Neil Z. Miller. RFK Jr. publicly demanded to know why. This is Lysenkoism 2.0 in action in 2026. The post Lysenkoism 2.0 in action: Robert F. Kennedy Jr. abuses his power to bully journal editors over a retraction first appeared on Scienc",
+      "brief": "RFK Jr. Bullies Journal Over Vaccine Retraction\n- HHS Secretary Kennedy pressured editors to restore a removed antivax VAERS study by Neil Miller.\n- UCSF's Dorit Reiss: Kennedy cited no regulatory authority and has none.",
+      "kicker": "",
+      "tags": []
+    },
+    {
+      "title": "We Have Always Been at War with AIRBORNE",
+      "link": "https://rasmussenretorts.substack.com/p/we-have-always-been-at-war-with-airborne",
+      "author": "Angela Rasmussen, PhD",
+      "sourceName": "Rasmussen Retorts",
+      "date": "2026-06-22T02:52:28.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!S9AW!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F34a5e530-9824-484f-b7f0-d6bc2641ab85_1086x724.jpeg",
+      "excerpt": "We fought a war with a word and everyone lost",
+      "brief": "Airborne Wars Nobody Won\n- WHO delayed \"airborne\" fearing global PPE strain.\n- Rasmussen admits early errors on masks, transmission.\n- Misuse of missteps fuels lasting distrust in public health.",
+      "kicker": "",
+      "tags": []
+    },
+    {
+      "title": "Redacting Reality",
+      "link": "https://drbobmorris.substack.com/p/redacting-reality",
+      "author": "Bob Morris, MD, PhD",
+      "sourceName": "The Skeptical Scientist",
+      "date": "2026-06-22T00:05:18.000Z",
+      "image": "https://substackcdn.com/image/fetch/$s_!QDlr!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe5ae1bc3-5f5b-41a3-9ab6-72619f4c6fdb_926x554.png",
+      "excerpt": "The COVID origins story gets the Epstein treatment",
+      "brief": "Gabbard's \"Transparency\" Hides More Than It Shows\n- 67 docs released; 3 of 4 lead items were never classified.\n- Key Livermore report: 75% redacted, bibliography blacked out.",
+      "kicker": "",
+      "tags": []
+    },
+    {
       "title": "Measles, bird flu, and Ebola are spreading. NIH just made its disease experts easier to fire.",
       "link": "https://www.celinegounder.com/p/nih-schedule-policy-career-disease-experts",
       "author": "Celine Gounder, MD",
@@ -149,53 +185,6 @@
       "brief": "",
       "kicker": "",
       "tags": []
-    },
-    {
-      "title": "The last hantavirus cruise passenger still locked down by Dr. Jay Bhattacharya and the CDC.",
-      "link": "https://insidemedicine.substack.com/p/the-last-passenger-locked-down-by",
-      "author": "Jeremy Faust, MD",
-      "sourceName": "Inside Medicine",
-      "date": "2026-06-11T10:02:58.000Z",
-      "image": "https://substackcdn.com/image/fetch/$s_!_qbF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4848b052-af12-44c8-9764-eedb769fbd37_1321x769.png",
-      "excerpt": "The results of a hearing last week remain in limbo.",
-      "brief": "Last hantavirus passenger held:\n\n17 of 18 MV Hondius passengers have left the Nebraska quarantine unit.\nOnly Angela Perryman remains, held by a CDC order signed by Bhattacharya.\nShe's the one who spoke out first.",
-      "kicker": "HANTAVIRUS",
-      "tags": [
-        "hantavirus",
-        "Bhattacharya"
-      ]
-    },
-    {
-      "title": "The Baloney Protection Act",
-      "link": "https://sciencebasedmedicine.org/the-baloney-protection-act/?utm_source=rss&utm_medium=rss&utm_campaign=the-baloney-protection-act",
-      "author": "Steven Novella, MD",
-      "sourceName": "SBM- Steven Novella",
-      "date": "2026-06-10T12:26:53.000Z",
-      "image": "https://sciencebasedmedicine.org/wp-content/uploads/2017/09/homeopathy1-480x408.jpg",
-      "excerpt": "We have had to endure a great deal of interference from government in the conduct of institutions that should be governed by science and evidence. I’m sorry to report – here is one more. Senators Mike Lee (R-UT) and Tommy Tuberville (R- AL) have recently introduced a bill that would limit the FDA’s ability to regulate ",
-      "brief": "- Sens. Lee and Tuberville filed a bill to block FDA regulation of homeopathy.\n- Bill eliminates need for testing of efficacy or even ingredients \n- Snake Oil Legalization Act",
-      "kicker": "FDA",
-      "tags": [
-        "FDA",
-        "MAHA",
-        "Policy"
-      ]
-    },
-    {
-      "title": "President Trump’s Childhood Vaccine Schedule",
-      "link": "https://pauloffit.substack.com/p/president-trumps-childhood-vaccine",
-      "author": "Paul Offit, MD",
-      "sourceName": "Beyond the Noise",
-      "date": "2026-06-08T11:03:02.000Z",
-      "image": "https://substack-post-media.s3.amazonaws.com/public/images/73d2bc1d-a8d7-4214-b5f1-9cf47faad1d8_1200x630.png",
-      "excerpt": "Donald Trump recently issued two executive orders claiming that children in the United States are receiving too many vaccines.",
-      "brief": "- Trump's EOs claim kids get too many vaccines today vs. 1980.\n- Reality: smallpox vaccine alone had more immune components than all 17 today's vaccines combined.\n- More vaccines = fewer deaths.",
-      "kicker": "VACCINES",
-      "tags": [
-        "Vaccines",
-        "MAHA",
-        "Policy"
-      ]
     }
   ],
   "feeds": {
